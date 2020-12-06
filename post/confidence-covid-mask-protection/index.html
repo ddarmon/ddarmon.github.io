@@ -37,7 +37,7 @@
  Andrew Gelman had an interesting post recently about the DANMASK-19 trial out of Denmark.">
 <meta itemprop="datePublished" content="2020-12-04T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2020-12-04T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="1377">
+<meta itemprop="wordCount" content="1376">
 
 
 
@@ -164,8 +164,10 @@ n &lt;- c(2470, 2392)
 <p>Finally, we get the two-sided <span class="math inline">\(P\)</span>-value for the null hypothesis that <span class="math inline">\(\delta = 0\)</span> using <code>pcurve()</code>.</p>
 <pre class="r"><code>conf.diff.props$pcurve(0)</code></pre>
 <pre><code>## [1] 0.3261612</code></pre>
-<p>Comparing to the study’s inferential statistics:
-&gt; The between-group difference was −0.3 percentage point (95% CI, −1.2 to 0.4 percentage point; P = 0.38) (odds ratio, 0.82 [CI, 0.54 to 1.23]; P = 0.33).</p>
+<p>Comparing to the study’s inferential statistics:</p>
+<blockquote>
+<p>The between-group difference was −0.3 percentage point (95% CI, −1.2 to 0.4 percentage point; P = 0.38) (odds ratio, 0.82 [CI, 0.54 to 1.23]; P = 0.33).</p>
+</blockquote>
 <p>we get more-or-less the same results, up to their choice of sign. I attribute the small differences between their values and mine to them using a Wald statistic, rather than a score statistic, to construct their intervals and compute their hypothesis tests. I used the (generally better behaved, especially for small risks) <a href="https://www.researchgate.net/publication/233397715_Confidence_intervals_for_the_ratio_and_difference_of_two_binomial_proportions">score statistic</a>.</p>
 <p>But why stop with a 95% confidence interval? We can show all possible confidence intervals for <span class="math inline">\(\delta\)</span> via the confidence curve by calling <code>plot.cconf()</code>:</p>
 <pre class="r"><code>plot.cconf(conf.diff.props,

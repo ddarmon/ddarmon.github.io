@@ -72,8 +72,10 @@ n &amp;lt;- c(2470, 2392)
 &lt;p&gt;Finally, we get the two-sided &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value for the null hypothesis that &lt;span class=&#34;math inline&#34;&gt;\(\delta = 0\)&lt;/span&gt; using &lt;code&gt;pcurve()&lt;/code&gt;.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.diff.props$pcurve(0)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] 0.3261612&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Comparing to the study’s inferential statistics:
-&amp;gt; The between-group difference was −0.3 percentage point (95% CI, −1.2 to 0.4 percentage point; P = 0.38) (odds ratio, 0.82 [CI, 0.54 to 1.23]; P = 0.33).&lt;/p&gt;
+&lt;p&gt;Comparing to the study’s inferential statistics:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The between-group difference was −0.3 percentage point (95% CI, −1.2 to 0.4 percentage point; P = 0.38) (odds ratio, 0.82 [CI, 0.54 to 1.23]; P = 0.33).&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;we get more-or-less the same results, up to their choice of sign. I attribute the small differences between their values and mine to them using a Wald statistic, rather than a score statistic, to construct their intervals and compute their hypothesis tests. I used the (generally better behaved, especially for small risks) &lt;a href=&#34;https://www.researchgate.net/publication/233397715_Confidence_intervals_for_the_ratio_and_difference_of_two_binomial_proportions&#34;&gt;score statistic&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;But why stop with a 95% confidence interval? We can show all possible confidence intervals for &lt;span class=&#34;math inline&#34;&gt;\(\delta\)&lt;/span&gt; via the confidence curve by calling &lt;code&gt;plot.cconf()&lt;/code&gt;:&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;plot.cconf(conf.diff.props,
