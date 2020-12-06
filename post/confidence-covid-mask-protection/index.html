@@ -26,25 +26,25 @@
     
     
     <meta property="og:title" content="How Confident Are We that Masks &#34;Work&#34;? Confidence Functions and the DANMASK-19 Study" />
-<meta property="og:description" content="Gelman’s post
-library(clp) # p[1] = rate of SARS-CoV-2 in control arm # p[2] = rate of SARS-CoV-2 in intervention arm x &lt;- c(53, 42) n &lt;- c(2470, 2392) conf.diff.props &lt;- clp::prop.conf(x = x, n = n) conf.diff.props$qconf(0.5)*100 ## [1] 0.3899442 conf.diff.props$qconf(c(0.025, 0.975))*100 ## [1] -0.3880645 1.2092257 conf.diff.props$pcurve(0) ## [1] 0.3261612 conf.rel.risk &lt;- clp::riskratio.conf(x, n) conf.rel.risk$qconf(0.5) ## [1] 0.8182709 conf.rel.risk$qconf(c(0.025, 0.975)) ## [1] 0.5493596 1.2186575 conf.rel.risk$pcurve(1) ## [1] 0." />
+<meta property="og:description" content="Attention Conservation Notice: I use a recent study about COVID-19 as an excuse to demo an R package I am developing. Some other reasons not to read this: (a) I am not an epidemiologist and (b) I do not plan to explain confidence functions enough for the uninitiated to make sense of this post.
+ Andrew Gelman had an interesting post recently about the DANMISK-19 trial out of Denmark." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/post/confidence-covid-mask-protection/" />
 <meta property="article:published_time" content="2020-12-04T00:00:00+00:00" />
 <meta property="article:modified_time" content="2020-12-04T00:00:00+00:00" />
 <meta itemprop="name" content="How Confident Are We that Masks &#34;Work&#34;? Confidence Functions and the DANMASK-19 Study">
-<meta itemprop="description" content="Gelman’s post
-library(clp) # p[1] = rate of SARS-CoV-2 in control arm # p[2] = rate of SARS-CoV-2 in intervention arm x &lt;- c(53, 42) n &lt;- c(2470, 2392) conf.diff.props &lt;- clp::prop.conf(x = x, n = n) conf.diff.props$qconf(0.5)*100 ## [1] 0.3899442 conf.diff.props$qconf(c(0.025, 0.975))*100 ## [1] -0.3880645 1.2092257 conf.diff.props$pcurve(0) ## [1] 0.3261612 conf.rel.risk &lt;- clp::riskratio.conf(x, n) conf.rel.risk$qconf(0.5) ## [1] 0.8182709 conf.rel.risk$qconf(c(0.025, 0.975)) ## [1] 0.5493596 1.2186575 conf.rel.risk$pcurve(1) ## [1] 0.">
+<meta itemprop="description" content="Attention Conservation Notice: I use a recent study about COVID-19 as an excuse to demo an R package I am developing. Some other reasons not to read this: (a) I am not an epidemiologist and (b) I do not plan to explain confidence functions enough for the uninitiated to make sense of this post.
+ Andrew Gelman had an interesting post recently about the DANMISK-19 trial out of Denmark.">
 <meta itemprop="datePublished" content="2020-12-04T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2020-12-04T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="87">
+<meta itemprop="wordCount" content="1377">
 
 
 
 <meta itemprop="keywords" content="statistics,confidence functions," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="How Confident Are We that Masks &#34;Work&#34;? Confidence Functions and the DANMASK-19 Study"/>
-<meta name="twitter:description" content="Gelman’s post
-library(clp) # p[1] = rate of SARS-CoV-2 in control arm # p[2] = rate of SARS-CoV-2 in intervention arm x &lt;- c(53, 42) n &lt;- c(2470, 2392) conf.diff.props &lt;- clp::prop.conf(x = x, n = n) conf.diff.props$qconf(0.5)*100 ## [1] 0.3899442 conf.diff.props$qconf(c(0.025, 0.975))*100 ## [1] -0.3880645 1.2092257 conf.diff.props$pcurve(0) ## [1] 0.3261612 conf.rel.risk &lt;- clp::riskratio.conf(x, n) conf.rel.risk$qconf(0.5) ## [1] 0.8182709 conf.rel.risk$qconf(c(0.025, 0.975)) ## [1] 0.5493596 1.2186575 conf.rel.risk$pcurve(1) ## [1] 0."/>
+<meta name="twitter:description" content="Attention Conservation Notice: I use a recent study about COVID-19 as an excuse to demo an R package I am developing. Some other reasons not to read this: (a) I am not an epidemiologist and (b) I do not plan to explain confidence functions enough for the uninitiated to make sense of this post.
+ Andrew Gelman had an interesting post recently about the DANMISK-19 trial out of Denmark."/>
 
   </head>
 
@@ -113,35 +113,126 @@ library(clp) # p[1] = rate of SARS-CoV-2 in control arm # p[2] = rate of SARS-Co
 
 Time spent:
 
+061220, 30 min
+
 -->
-<p><a href="https://statmodeling.stat.columbia.edu/2020/12/04/discussion-of-uncertainties-in-the-coronavirus-mask-study-leads-us-to-think-about-some-issues/">Gelman’s post</a></p>
-<pre class="r"><code>library(clp)</code></pre>
+<blockquote>
+<p><strong>Attention Conservation Notice:</strong> I use a recent study about COVID-19 as an excuse to demo an R package I am developing. Some other reasons not to read this: (a) I am not an epidemiologist and (b) I do not plan to explain confidence functions enough for the uninitiated to make sense of this post.</p>
+</blockquote>
+<p>Andrew Gelman had an interesting <a href="https://statmodeling.stat.columbia.edu/2020/12/04/discussion-of-uncertainties-in-the-coronavirus-mask-study-leads-us-to-think-about-some-issues/">post</a> recently about the <a href="https://www.acpjournals.org/doi/10.7326/M20-6817">DANMISK-19 trial</a> out of Denmark. This study randomized individuals to recieve a mask recommendation and a supply of 50 surgical masks (or not):</p>
+<blockquote>
+<p>Encouragement to follow social distancing measures for coronavirus disease 2019, plus either no mask recommendation or a recommendation to wear a mask when outside the home among other persons together with a supply of 50 surgical masks and instructions for proper use.</p>
+</blockquote>
+<p>From that study’s results synopsis:</p>
+<blockquote>
+<p>A total of 3030 participants were randomly assigned to the recommendation to wear masks, and 2994 were assigned to control; 4862 completed the study. Infection with SARS-CoV-2 occurred in 42 participants recommended masks (1.8%) and 53 control participants (2.1%). The between-group difference was −0.3 percentage point (95% CI, −1.2 to 0.4 percentage point; P = 0.38) (odds ratio, 0.82 [CI, 0.54 to 1.23]; P = 0.33). Multiple imputation accounting for loss to follow-up yielded similar results. Although the difference observed was not statistically significant, the 95% CIs are compatible with a 46% reduction to a 23% increase in infection.</p>
+</blockquote>
+<p>And the synopsis conclusion:</p>
+<blockquote>
+<p>The recommendation to wear surgical masks to supplement other public health measures did not reduce the SARS-CoV-2 infection rate among wearers by more than 50% in a community with modest infection rates, some degree of social distancing, and uncommon general mask use. The data were compatible with lesser degrees of self-protection.</p>
+</blockquote>
+<p>I won’t focus on the design of the study, except to make the obvious point: the target of this study is whether the <strong>recommendation to wear and provision of masks</strong> reduces rates of SARS-CoV-2 infection, <em>not</em> whether <strong>wearing masks</strong> reduces rates SARS-CoV-2 infection. Those are two very different questions.</p>
+<p>With that caveat out of the way, let’s look at some of the inferential statistics resulting from this study and how they might be better-reported using <a href="https://www.mn.uio.no/math/english/research/projects/focustat/the-focustat-blog!/confidence-dummies.html">confidence functions</a>.</p>
+<p>We begin with the difference between the reported rates of SARS-CoV-2 infection in the control (<span class="math inline">\(p_{C}\)</span>) and treatment (<span class="math inline">\(p_{T}\)</span>) groups: <span class="math inline">\(\delta = p_{C} - p_{T}\)</span>. The sample estimates of these rates are the obvious things: the proportion of individuals in the study who develop symptoms of COVID-19,</p>
 <pre class="r"><code># p[1] = rate of SARS-CoV-2 in control arm
 # p[2] = rate of SARS-CoV-2 in intervention arm
 
 x &lt;- c(53, 42)
 n &lt;- c(2470, 2392)
 
-conf.diff.props &lt;- clp::prop.conf(x = x, n = n)</code></pre>
-<p><img src="/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-2-1.png" width="672" /><img src="/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-2-2.png" width="672" /></p>
+(p&lt;-x/n)</code></pre>
+<pre><code>## [1] 0.02145749 0.01755853</code></pre>
+<p>And the sample estimate for <span class="math inline">\(\delta\)</span> is also the obvious estimate:</p>
+<pre class="r"><code>p[1] - p[2]</code></pre>
+<pre><code>## [1] 0.003898961</code></pre>
+<p>The authors report a two-sided <span class="math inline">\(P\)</span>-value for the null hypothesis of no difference in rates between the two arms of the study, i.e. hte <span class="math inline">\(P\)</span>-value for the test
+<span class="math display">\[\begin{aligned} H_{0} &amp;: p_{C} - p_{T} = \delta_{0} = 0 \\ H_{1} &amp;: p_{C} - p_{T} \neq \delta_{0} = 0 \end{aligned}.\]</span></p>
+<p>Let’s construct confidence functions for <span class="math inline">\(\delta\)</span>, rather than just compute the particular <span class="math inline">\(P\)</span>-value for the particular null value.</p>
+<p>We load in the <code>clp</code> package (which you can find a beta version of <a href="https://github.com/ddarmon/clp">here</a>):</p>
+<pre class="r"><code>library(clp)</code></pre>
+<p>We then use the <code>prop.conf()</code> function form confidence functions for <span class="math inline">\(\delta\)</span>:</p>
+<pre class="r"><code>conf.diff.props &lt;- clp::prop.conf(x = x, n = n, plot = FALSE)</code></pre>
+<p>For example, from the confidence quantile function <code>qconf()</code>, we can recover the point estimate for the difference in risks as a percentage as the median of the confidence distribution:</p>
 <pre class="r"><code>conf.diff.props$qconf(0.5)*100</code></pre>
 <pre><code>## [1] 0.3899442</code></pre>
+<p>which matches (up to some numerical fuzz) the direct point estimate:</p>
+<pre class="r"><code>(p[1] - p[2])*100</code></pre>
+<pre><code>## [1] 0.3898961</code></pre>
+<p>We can also recover the 95% confidence interval from <span class="math inline">\(\delta\)</span> by taking the 2.5th and 97.5th percentiles of the confidence distribution:</p>
 <pre class="r"><code>conf.diff.props$qconf(c(0.025, 0.975))*100</code></pre>
 <pre><code>## [1] -0.3880645  1.2092257</code></pre>
+<p>Finally, we get the two-sided <span class="math inline">\(P\)</span>-value for the null hypothesis that <span class="math inline">\(\delta = 0\)</span> using <code>pcurve()</code>.</p>
 <pre class="r"><code>conf.diff.props$pcurve(0)</code></pre>
 <pre><code>## [1] 0.3261612</code></pre>
+<p>Comparing to the study’s inferential statistics:
+&gt; The between-group difference was −0.3 percentage point (95% CI, −1.2 to 0.4 percentage point; P = 0.38) (odds ratio, 0.82 [CI, 0.54 to 1.23]; P = 0.33).</p>
+<p>we get more-or-less the same results, up to their choice of sign. I attribute the small differences between their values and mine to them using a Wald statistic, rather than a score statistic, to construct their intervals and compute their hypothesis tests. I used the (generally better behaved, especially for small risks) <a href="https://www.researchgate.net/publication/233397715_Confidence_intervals_for_the_ratio_and_difference_of_two_binomial_proportions">score statistic</a>.</p>
+<p>But why stop with a 95% confidence interval? We can show all possible confidence intervals for <span class="math inline">\(\delta\)</span> via the confidence curve by calling <code>plot.cconf()</code>:</p>
+<pre class="r"><code>plot.cconf(conf.diff.props,
+           xlab = &#39;p[1] - p[2]&#39;)</code></pre>
+<p><img src="/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>Yes, <span class="math inline">\(\delta = 0\)</span> (no difference) is contained in the 95% confidence interval, so we would fail to reject <span class="math inline">\(\delta = 0\)</span> at a 5% significance level. But the weight of the evidence is for the mask-PSA intervention being <strong>more effective</strong> than no-intervention. We can make this clearer by plotting the confidence density for <span class="math inline">\(\delta\)</span>:</p>
+<pre class="r"><code>plot.dconf(conf.diff.props,
+           xlab = &#39;p[1] - p[2]&#39;)
+
+x.shade &lt;- seq(0, 0.03, length.out = 100)
+polygon(x = c(0, 
+              x.shade,
+              rev(x.shade),
+              0),
+        y = c(0, 
+              rep(0, length(x.shade)),
+              conf.diff.props$dconf(rev(x.shade)),
+              0),
+        col = rgb(0, 1, 0, alpha = 0.5))</code></pre>
+<p><img src="/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>The green shaded area is the fiducial probability associated with <span class="math inline">\(\delta\)</span> being positive (positive impact of the mask-PSA), which we can compute using the complementary confidence distribution:</p>
+<pre class="r"><code>1-conf.diff.props$pconf(0)</code></pre>
+<pre><code>## [1] 0.8369194</code></pre>
+<p>83.7% of the evidence is in favor of the mask-PSA having <strong>some</strong> positive impact compared to no-PSA. This corresponds to the <span class="math inline">\(P\)</span>- value for the left-sided test
+<span class="math display">\[\begin{aligned} H_{0} &amp;: \delta \geq 0 \\ H_{1} &amp;: \delta &lt; 0 \end{aligned}\]</span>
+We get the <span class="math inline">\(P\)</span>-value for the right-sided test
+<span class="math display">\[\begin{aligned} H_{0} &amp;: \delta \leq 0 \\ H_{1} &amp;: \delta &gt; 0 \end{aligned}\]</span>
+by direct use of the confidence distribution:</p>
+<pre class="r"><code>conf.diff.props$pconf(0)</code></pre>
+<pre><code>## [1] 0.1630806</code></pre>
+<p>and thus have weaker evidence for the mask-PSA being <strong>less</strong> effective than the no-PSA intervention.</p>
+<p>The main takeaway from this study, of course, is that we just don’t know for sure whether the mask-PSA worked or not. The weight of evidence is in favor of the mask-PSA working, but we would need a new study, with more participants, to get a better idea. Though, since we can never step in the same river twice, other things are clearly different in Denmark now compared to April and May of 2020. This reminds us that there is no “<strong>the</strong> effect of a mask-PSA,” as the effectiveness of that PSA will vary depending on all of the contingencies currently in play.</p>
+<p>We can repeat the same analysis with the relative risk and odds ratio, other common parameters when assessing changes in risk. The relative risk (or risk ratio) is defined as
+<span class="math display">\[\begin{aligned} \rho &amp;= \frac{\text{Risk in Treatment}}{\text{Risk in Control}} \\ &amp;= \frac{p_{T}}{p_{C}}   \end{aligned}\]</span>
+and we can compute the confidence functions using <code>clp</code>’s <code>riskratio.conf()</code>.</p>
 <pre class="r"><code>conf.rel.risk &lt;- clp::riskratio.conf(x, n)</code></pre>
-<p><img src="/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-5-1.png" width="672" /><img src="/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-5-2.png" width="672" /></p>
+<p><img src="/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-13-1.png" width="672" /><img src="/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-13-2.png" width="672" /></p>
+<p>and get out the median of the confidence distribution</p>
 <pre class="r"><code>conf.rel.risk$qconf(0.5)</code></pre>
 <pre><code>## [1] 0.8182709</code></pre>
+<p>which matches the obvious point estimate of the relative risk from the sample:</p>
+<pre class="r"><code>p[2]/p[1]</code></pre>
+<pre><code>## [1] 0.8182937</code></pre>
+<p>We compute a 95% confidence distribution for <span class="math inline">\(\rho\)</span> using the confidence quantile:</p>
 <pre class="r"><code>conf.rel.risk$qconf(c(0.025, 0.975))</code></pre>
 <pre><code>## [1] 0.5493596 1.2186575</code></pre>
+<p>So the data are consistent with anywhere from a 45% reduction in risk for the treatment group to a 22% increase in risk for the treatment group. This matches the portion of their results synopsis:</p>
+<blockquote>
+<p>Although the difference observed was not statistically significant, the 95% CIs are compatible with a 46% reduction to a 23% increase in infection.</p>
+</blockquote>
+<p>Though, again, they’re presumably using a Wald statistic rather than a score statistic to compute their confidence interval.</p>
+<p>The <span class="math inline">\(P\)</span>-value for a two-sided test of <span class="math inline">\(\rho = 1\)</span> (if we must have it), is</p>
 <pre class="r"><code>conf.rel.risk$pcurve(1)</code></pre>
 <pre><code>## [1] 0.3261612</code></pre>
+<p>where we use <span class="math inline">\(\rho = 1\)</span> since a risk ratio of 1 indicates no difference in risk between the two groups. This exactly matches the <span class="math inline">\(P\)</span>-value for <span class="math inline">\(\delta = 0\)</span>.</p>
+<p>Finally, all the same analyses, but using the odds ratio
+<span class="math display">\[\begin{aligned} \omega &amp;= \frac{\text{Odds(Infection; Treatment)}}{\text{Odds(Infection; Control)}} \\ &amp;= \frac{p_{T}/(1 - p_{T})}{p_{C}/(1-p_1)}   \end{aligned}\]</span>
+I’ll leave out the color commentary this time:</p>
 <pre class="r"><code>conf.odds.ratio &lt;- clp::oddsratio.conf(x, n)</code></pre>
-<p><img src="/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-8-1.png" width="672" /><img src="/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-8-2.png" width="672" /></p>
+<p><img src="/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-18-1.png" width="672" /><img src="/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-18-2.png" width="672" /></p>
 <pre class="r"><code>conf.odds.ratio$qconf(0.5)</code></pre>
 <pre><code>## [1] 0.8150468</code></pre>
+<pre class="r"><code>odds.control   &lt;- p[1]/(1-p[1])
+odds.treatment &lt;- p[2]/(1-p[2])
+
+odds.treatment/odds.control</code></pre>
+<pre><code>## [1] 0.8150462</code></pre>
 <pre class="r"><code>conf.odds.ratio$qconf(c(0.025, 0.975))</code></pre>
 <pre><code>## [1] 0.541522 1.226716</code></pre>
 <pre class="r"><code>conf.odds.ratio$pcurve(1)</code></pre>

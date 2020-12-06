@@ -9,10 +9,10 @@
     <lastBuildDate>Fri, 04 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>How Confident Are We that Masks &#34;Work&#34;? Confidence Functions and the DANMASK-19 Study</title>
-      <link>/draft/confidence-covid-mask-protection/</link>
+      <link>/post/confidence-covid-mask-protection/</link>
       <pubDate>Fri, 04 Dec 2020 00:00:00 +0000</pubDate>
       
-      <guid>/draft/confidence-covid-mask-protection/</guid>
+      <guid>/post/confidence-covid-mask-protection/</guid>
       <description>
 
 
@@ -24,6 +24,9 @@ Time spent:
 061220, 30 min
 
 --&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Attention Conservation Notice:&lt;/strong&gt; I use a recent study about COVID-19 as an excuse to demo an R package I am developing. Some other reasons not to read this: (a) I am not an epidemiologist and (b) I do not plan to explain confidence functions enough for the uninitiated to make sense of this post.&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;Andrew Gelman had an interesting &lt;a href=&#34;https://statmodeling.stat.columbia.edu/2020/12/04/discussion-of-uncertainties-in-the-coronavirus-mask-study-leads-us-to-think-about-some-issues/&#34;&gt;post&lt;/a&gt; recently about the &lt;a href=&#34;https://www.acpjournals.org/doi/10.7326/M20-6817&#34;&gt;DANMISK-19 trial&lt;/a&gt; out of Denmark. This study randomized individuals to recieve a mask recommendation and a supply of 50 surgical masks (or not):&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Encouragement to follow social distancing measures for coronavirus disease 2019, plus either no mask recommendation or a recommendation to wear a mask when outside the home among other persons together with a supply of 50 surgical masks and instructions for proper use.&lt;/p&gt;
@@ -36,8 +39,9 @@ Time spent:
 &lt;blockquote&gt;
 &lt;p&gt;The recommendation to wear surgical masks to supplement other public health measures did not reduce the SARS-CoV-2 infection rate among wearers by more than 50% in a community with modest infection rates, some degree of social distancing, and uncommon general mask use. The data were compatible with lesser degrees of self-protection.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(clp)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} H_{0} &amp;amp;: p_{1} - p_{2} = \delta \\ H_{1} &amp;amp;: p_{1} - p_{2} \neq \delta \end{aligned}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;I won’t focus on the design of the study, except to make the obvious point: the target of this study is whether the &lt;strong&gt;recommendation to wear and provision of masks&lt;/strong&gt; reduces rates of SARS-CoV-2 infection, &lt;em&gt;not&lt;/em&gt; whether &lt;strong&gt;wearing masks&lt;/strong&gt; reduces rates SARS-CoV-2 infection. Those are two very different questions.&lt;/p&gt;
+&lt;p&gt;With that caveat out of the way, let’s look at some of the inferential statistics resulting from this study and how they might be better-reported using &lt;a href=&#34;https://www.mn.uio.no/math/english/research/projects/focustat/the-focustat-blog!/confidence-dummies.html&#34;&gt;confidence functions&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;We begin with the difference between the reported rates of SARS-CoV-2 infection in the control (&lt;span class=&#34;math inline&#34;&gt;\(p_{C}\)&lt;/span&gt;) and treatment (&lt;span class=&#34;math inline&#34;&gt;\(p_{T}\)&lt;/span&gt;) groups: &lt;span class=&#34;math inline&#34;&gt;\(\delta = p_{C} - p_{T}\)&lt;/span&gt;. The sample estimates of these rates are the obvious things: the proportion of individuals in the study who develop symptoms of COVID-19,&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# p[1] = rate of SARS-CoV-2 in control arm
 # p[2] = rate of SARS-CoV-2 in intervention arm
 
@@ -46,18 +50,36 @@ n &amp;lt;- c(2470, 2392)
 
 (p&amp;lt;-x/n)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] 0.02145749 0.01755853&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.diff.props &amp;lt;- clp::prop.conf(x = x, n = n)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/draft/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;672&#34; /&gt;&lt;img src=&#34;/draft/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-3-2.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;And the sample estimate for &lt;span class=&#34;math inline&#34;&gt;\(\delta\)&lt;/span&gt; is also the obvious estimate:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;p[1] - p[2]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.003898961&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The authors report a two-sided &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value for the null hypothesis of no difference in rates between the two arms of the study, i.e. hte &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value for the test
+&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} H_{0} &amp;amp;: p_{C} - p_{T} = \delta_{0} = 0 \\ H_{1} &amp;amp;: p_{C} - p_{T} \neq \delta_{0} = 0 \end{aligned}.\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Let’s construct confidence functions for &lt;span class=&#34;math inline&#34;&gt;\(\delta\)&lt;/span&gt;, rather than just compute the particular &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value for the particular null value.&lt;/p&gt;
+&lt;p&gt;We load in the &lt;code&gt;clp&lt;/code&gt; package (which you can find a beta version of &lt;a href=&#34;https://github.com/ddarmon/clp&#34;&gt;here&lt;/a&gt;):&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(clp)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We then use the &lt;code&gt;prop.conf()&lt;/code&gt; function form confidence functions for &lt;span class=&#34;math inline&#34;&gt;\(\delta\)&lt;/span&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.diff.props &amp;lt;- clp::prop.conf(x = x, n = n, plot = FALSE)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;For example, from the confidence quantile function &lt;code&gt;qconf()&lt;/code&gt;, we can recover the point estimate for the difference in risks as a percentage as the median of the confidence distribution:&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.diff.props$qconf(0.5)*100&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] 0.3899442&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;which matches (up to some numerical fuzz) the direct point estimate:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;(p[1] - p[2])*100&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.3898961&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can also recover the 95% confidence interval from &lt;span class=&#34;math inline&#34;&gt;\(\delta\)&lt;/span&gt; by taking the 2.5th and 97.5th percentiles of the confidence distribution:&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.diff.props$qconf(c(0.025, 0.975))*100&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] -0.3880645  1.2092257&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Finally, we get the two-sided &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value for the null hypothesis that &lt;span class=&#34;math inline&#34;&gt;\(\delta = 0\)&lt;/span&gt; using &lt;code&gt;pcurve()&lt;/code&gt;.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.diff.props$pcurve(0)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] 0.3261612&lt;/code&gt;&lt;/pre&gt;
-&lt;blockquote&gt;
-&lt;p&gt;The between-group difference was −0.3 percentage point (95% CI, −1.2 to 0.4 percentage point; P = 0.38) (odds ratio, 0.82 [CI, 0.54 to 1.23]; P = 0.33).&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;I attribute the difference between their values and mine to them using a Wald statistic, rather than a score statistic, to construct their intervals and compute their hypothesis tests. I used the (generally better behaved, especially for small risks) &lt;a href=&#34;https://www.researchgate.net/publication/233397715_Confidence_intervals_for_the_ratio_and_difference_of_two_binomial_proportions&#34;&gt;score statistic&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Comparing to the study’s inferential statistics:
+&amp;gt; The between-group difference was −0.3 percentage point (95% CI, −1.2 to 0.4 percentage point; P = 0.38) (odds ratio, 0.82 [CI, 0.54 to 1.23]; P = 0.33).&lt;/p&gt;
+&lt;p&gt;we get more-or-less the same results, up to their choice of sign. I attribute the small differences between their values and mine to them using a Wald statistic, rather than a score statistic, to construct their intervals and compute their hypothesis tests. I used the (generally better behaved, especially for small risks) &lt;a href=&#34;https://www.researchgate.net/publication/233397715_Confidence_intervals_for_the_ratio_and_difference_of_two_binomial_proportions&#34;&gt;score statistic&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;But why stop with a 95% confidence interval? We can show all possible confidence intervals for &lt;span class=&#34;math inline&#34;&gt;\(\delta\)&lt;/span&gt; via the confidence curve by calling &lt;code&gt;plot.cconf()&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;plot.cconf(conf.diff.props,
+           xlab = &amp;#39;p[1] - p[2]&amp;#39;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-9-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Yes, &lt;span class=&#34;math inline&#34;&gt;\(\delta = 0\)&lt;/span&gt; (no difference) is contained in the 95% confidence interval, so we would fail to reject &lt;span class=&#34;math inline&#34;&gt;\(\delta = 0\)&lt;/span&gt; at a 5% significance level. But the weight of the evidence is for the mask-PSA intervention being &lt;strong&gt;more effective&lt;/strong&gt; than no-intervention. We can make this clearer by plotting the confidence density for &lt;span class=&#34;math inline&#34;&gt;\(\delta\)&lt;/span&gt;:&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;plot.dconf(conf.diff.props,
            xlab = &amp;#39;p[1] - p[2]&amp;#39;)
 
@@ -71,34 +93,47 @@ polygon(x = c(0,
               conf.diff.props$dconf(rev(x.shade)),
               0),
         col = rgb(0, 1, 0, alpha = 0.5))&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/draft/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-7-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-10-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The green shaded area is the fiducial probability associated with &lt;span class=&#34;math inline&#34;&gt;\(\delta\)&lt;/span&gt; being positive (positive impact of the mask-PSA), which we can compute using the complementary confidence distribution:&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;1-conf.diff.props$pconf(0)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] 0.8369194&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} H_{0} &amp;amp;: \delta \geq 0 \\ H_{1} &amp;amp;: \delta &amp;lt; 0 \end{aligned}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} H_{0} &amp;amp;: \delta \leq 0 \\ H_{1} &amp;amp;: \delta &amp;gt; 0 \end{aligned}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;83.7% of the evidence is in favor of the mask-PSA having &lt;strong&gt;some&lt;/strong&gt; positive impact compared to no-PSA. This corresponds to the &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;- value for the left-sided test
+&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} H_{0} &amp;amp;: \delta \geq 0 \\ H_{1} &amp;amp;: \delta &amp;lt; 0 \end{aligned}\]&lt;/span&gt;
+We get the &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value for the right-sided test
+&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} H_{0} &amp;amp;: \delta \leq 0 \\ H_{1} &amp;amp;: \delta &amp;gt; 0 \end{aligned}\]&lt;/span&gt;
+by direct use of the confidence distribution:&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.diff.props$pconf(0)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] 0.1630806&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;We can repeat the same analysis with relative risk, defined as
-&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} \rho &amp;amp;= \frac{\text{Risk in Treatment}}{\text{Risk in Control}} \\ &amp;amp;= \frac{p_{2}}{p_{1}}   \end{aligned}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;and thus have weaker evidence for the mask-PSA being &lt;strong&gt;less&lt;/strong&gt; effective than the no-PSA intervention.&lt;/p&gt;
+&lt;p&gt;The main takeaway from this study, of course, is that we just don’t know for sure whether the mask-PSA worked or not. The weight of evidence is in favor of the mask-PSA working, but we would need a new study, with more participants, to get a better idea. Though, since we can never step in the same river twice, other things are clearly different in Denmark now compared to April and May of 2020. This reminds us that there is no “&lt;strong&gt;the&lt;/strong&gt; effect of a mask-PSA,” as the effectiveness of that PSA will vary depending on all of the contingencies currently in play.&lt;/p&gt;
+&lt;p&gt;We can repeat the same analysis with the relative risk and odds ratio, other common parameters when assessing changes in risk. The relative risk (or risk ratio) is defined as
+&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} \rho &amp;amp;= \frac{\text{Risk in Treatment}}{\text{Risk in Control}} \\ &amp;amp;= \frac{p_{T}}{p_{C}}   \end{aligned}\]&lt;/span&gt;
+and we can compute the confidence functions using &lt;code&gt;clp&lt;/code&gt;’s &lt;code&gt;riskratio.conf()&lt;/code&gt;.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.rel.risk &amp;lt;- clp::riskratio.conf(x, n)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/draft/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-10-1.png&#34; width=&#34;672&#34; /&gt;&lt;img src=&#34;/draft/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-10-2.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-13-1.png&#34; width=&#34;672&#34; /&gt;&lt;img src=&#34;/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-13-2.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;and get out the median of the confidence distribution&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.rel.risk$qconf(0.5)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] 0.8182709&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;which matches the obvious point estimate of the relative risk from the sample:&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;p[2]/p[1]&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] 0.8182937&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We compute a 95% confidence distribution for &lt;span class=&#34;math inline&#34;&gt;\(\rho\)&lt;/span&gt; using the confidence quantile:&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.rel.risk$qconf(c(0.025, 0.975))&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] 0.5493596 1.2186575&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;So the data are consistent with anywhere from a 45% reduction in risk for the treatment group to a 22% increase in risk for the treatment group. This matches the portion of their results synopsis:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Although the difference observed was not statistically significant, the 95% CIs are compatible with a 46% reduction to a 23% increase in infection.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;Though presumably they’re using a Wald statistic rather than a score statistic to compute their confidence interval.&lt;/p&gt;
+&lt;p&gt;Though, again, they’re presumably using a Wald statistic rather than a score statistic to compute their confidence interval.&lt;/p&gt;
+&lt;p&gt;The &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value for a two-sided test of &lt;span class=&#34;math inline&#34;&gt;\(\rho = 1\)&lt;/span&gt; (if we must have it), is&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.rel.risk$pcurve(1)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] 0.3261612&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;where we use &lt;span class=&#34;math inline&#34;&gt;\(\rho = 1\)&lt;/span&gt; since a risk ratio of 1 indicates no difference in risk between the two groups. This exactly matches the &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value for &lt;span class=&#34;math inline&#34;&gt;\(\delta = 0\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p&gt;Finally, all the same analyses, but using the odds ratio
-&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} \omega &amp;amp;= \frac{\text{Odds(Infection; Treatment)}}{\text{Odds(Infection; Control)}} \\ &amp;amp;= \frac{p_{2}/(1 - p_{2})}{p_{1}/(1-p_1)}   \end{aligned}\]&lt;/span&gt;&lt;/p&gt;
+&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} \omega &amp;amp;= \frac{\text{Odds(Infection; Treatment)}}{\text{Odds(Infection; Control)}} \\ &amp;amp;= \frac{p_{T}/(1 - p_{T})}{p_{C}/(1-p_1)}   \end{aligned}\]&lt;/span&gt;
+I’ll leave out the color commentary this time:&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.odds.ratio &amp;lt;- clp::oddsratio.conf(x, n)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/draft/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-15-1.png&#34; width=&#34;672&#34; /&gt;&lt;img src=&#34;/draft/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-15-2.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-18-1.png&#34; width=&#34;672&#34; /&gt;&lt;img src=&#34;/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-18-2.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.odds.ratio$qconf(0.5)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] 0.8150468&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;odds.control   &amp;lt;- p[1]/(1-p[1])

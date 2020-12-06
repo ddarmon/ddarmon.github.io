@@ -6,20 +6,10 @@
     <description>Recent content in Drafts on Practically Insignificant</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 04 Dec 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 29 Jun 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/draft/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>How Confident Are We that Masks &#34;Work&#34;? Confidence Functions and the DANMASK-19 Study</title>
-      <link>/draft/confidence-covid-mask-protection/</link>
-      <pubDate>Fri, 04 Dec 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/draft/confidence-covid-mask-protection/</guid>
-      <description>Andrew Gelman had an interesting post recently about the DANMISK-19 trial out of Denmark. This study randomized individuals to recieve a mask recommendation and a supply of 50 surgical masks (or not):
- Encouragement to follow social distancing measures for coronavirus disease 2019, plus either no mask recommendation or a recommendation to wear a mask when outside the home among other persons together with a supply of 50 surgical masks and instructions for proper use.</description>
-    </item>
     
     <item>
       <title>Mid P-values</title>
