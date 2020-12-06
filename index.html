@@ -34,7 +34,7 @@
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="/" />
-<meta property="og:updated_time" content="2020-06-29T00:00:00+00:00" />
+<meta property="og:updated_time" content="2020-12-04T00:00:00+00:00" />
 <meta itemprop="name" content="Practically Insignificant">
 <meta itemprop="description" content=""><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Practically Insignificant"/>
@@ -120,6 +120,31 @@
       
       <div class="blah w-100">
         <h1 class="f3 fw1 athelas mt0 lh-title">
+          <a href="/post/confidence-covid-mask-protection/" class="color-inherit dim link">
+            How Confident Are We that Masks &#34;Work&#34;? Confidence Functions and the DANMASK-19 Study
+            </a>
+        </h1>
+        <div class="f6 f5-l lh-copy nested-copy-line-height nested-links">
+          Gelman’s post
+library(clp) # p[1] = rate of SARS-CoV-2 in control arm # p[2] = rate of SARS-CoV-2 in intervention arm x &lt;- c(53, 42) n &lt;- c(2470, 2392) conf.diff.props &lt;- clp::prop.conf(x = x, n = n) conf.diff.props$qconf(0.5)*100 ## [1] 0.3899442 conf.diff.props$qconf(c(0.025, 0.975))*100 ## [1] -0.3880645 1.2092257 conf.diff.props$pcurve(0) ## [1] 0.3261612 conf.rel.risk &lt;- clp::riskratio.conf(x, n) conf.rel.risk$qconf(0.5) ## [1] 0.8182709 conf.rel.risk$qconf(c(0.025, 0.975)) ## [1] 0.5493596 1.2186575 conf.rel.risk$pcurve(1) ## [1] 0.
+        </div>
+          <a href="/post/confidence-covid-mask-protection/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+          </div>
+        
+          <div class="relative w-100 mb4">
+            
+<article class="bb b--black-10">
+  <div class="db pv4 ph3 ph0-l no-underline dark-gray">
+    <div class="flex flex-column flex-row-ns">
+      
+      <div class="blah w-100">
+        <h1 class="f3 fw1 athelas mt0 lh-title">
           <a href="/post/mid-p-values/" class="color-inherit dim link">
             Mid P-values
             </a>
@@ -164,32 +189,25 @@ n &lt;- 10 p0 &lt;- 0.5 xs &lt;- 0:n Ps &lt;- 1-pbinom(xs-1, n, p0) data.frame(x
 
           </div>
         
-          <div class="relative w-100 mb4">
-            
-<article class="bb b--black-10">
-  <div class="db pv4 ph3 ph0-l no-underline dark-gray">
-    <div class="flex flex-column flex-row-ns">
-      
-      <div class="blah w-100">
-        <h1 class="f3 fw1 athelas mt0 lh-title">
-          <a href="/post/salvaging-lost-significance-via-randomization-randomized-p-values-for-discrete-test-statistics/" class="color-inherit dim link">
-            Salvaging Lost Significance via Randomization: Randomized \(P\)-values for Discrete Test Statistics
-            </a>
-        </h1>
-        <div class="f6 f5-l lh-copy nested-copy-line-height nested-links">
-          Last time, we saw that when performing a hypothesis test with a discrete test statistic, we will typically lose size unless we happen to be very lucky and have the significance level \(\alpha\) exactly match one of our possible \(P\)-values. In this post, I will introduce a randomized hypothesis test that will regain the size we lost. Unlike a lot of randomization in statistics, the randomization here comes at the end: we randomize the \(P\)-value in order to recover the size.
-        </div>
-          <a href="/post/salvaging-lost-significance-via-randomization-randomized-p-values-for-discrete-test-statistics/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
-        
-      </div>
-    </div>
-  </div>
-</article>
-
-          </div>
-        
       </section>
 
+      
+      <section class="w-100">
+        <h1 class="f3">More</h1>
+        
+        
+          <h2 class="f5 fw4 mb4 dib mr3">
+            <a href="/post/salvaging-lost-significance-via-randomization-randomized-p-values-for-discrete-test-statistics/" class="link black dim">
+              Salvaging Lost Significance via Randomization: Randomized \(P\)-values for Discrete Test Statistics
+            </a>
+          </h2>
+        
+
+        
+        
+          <a href="/post/" class="link db f6 pa2 br3 bg-mid-gray white dim w4 tc">All Posts</a>
+        
+        </section>
       
 
       </div>
