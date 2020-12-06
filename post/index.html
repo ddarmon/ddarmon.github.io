@@ -34,7 +34,7 @@
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="/post/" />
-<meta property="og:updated_time" content="2020-12-04T00:00:00+00:00" />
+<meta property="og:updated_time" content="2020-06-28T00:00:00+00:00" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content=""><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Posts"/>
@@ -92,51 +92,6 @@
       
     </section>
     <aside class="flex-ns flex-wrap justify-around mt5">
-      
-        <div class="relative w-100 w-30-l mb4 bg-white">
-          
-            <div class="mb3 pa4 mid-gray overflow-hidden">
-    
-      <div class="f6">
-        December 4, 2020
-      </div>
-    
-    <h1 class="f3 near-black">
-      <a href="/post/confidence-covid-mask-protection/" class="link black dim">
-        How Confident Are We that Masks &#34;Work&#34;? Confidence Functions and the DANMASK-19 Study
-      </a>
-    </h1>
-    <div class="nested-links f5 lh-copy nested-copy-line-height">
-      Gelman’s post
-library(clp) # p[1] = rate of SARS-CoV-2 in control arm # p[2] = rate of SARS-CoV-2 in intervention arm x &lt;- c(53, 42) n &lt;- c(2470, 2392) conf.diff.props &lt;- clp::prop.conf(x = x, n = n) conf.diff.props$qconf(0.5)*100 ## [1] 0.3899442 conf.diff.props$qconf(c(0.025, 0.975))*100 ## [1] -0.3880645 1.2092257 conf.diff.props$pcurve(0) ## [1] 0.3261612 conf.rel.risk &lt;- clp::riskratio.conf(x, n) conf.rel.risk$qconf(0.5) ## [1] 0.8182709 conf.rel.risk$qconf(c(0.025, 0.975)) ## [1] 0.5493596 1.2186575 conf.rel.risk$pcurve(1) ## [1] 0.
-    </div>
-  </div>
-
-        </div>
-      
-        <div class="relative w-100 w-30-l mb4 bg-white">
-          
-            <div class="mb3 pa4 mid-gray overflow-hidden">
-    
-      <div class="f6">
-        June 29, 2020
-      </div>
-    
-    <h1 class="f3 near-black">
-      <a href="/post/mid-p-values/" class="link black dim">
-        Mid P-values
-      </a>
-    </h1>
-    <div class="nested-links f5 lh-copy nested-copy-line-height">
-      Mid-\(P\) Confidence Intervals: A Brief Review by Berry and Armitage.
-\[\begin{aligned} H_{0} &amp;: p \leq 1/2\\ H_{1} &amp;: p &gt; 1/2 \end{aligned}\]
-\[P\mathrm{-value} = P(X \geq x_{\text{obs}})\]
-\[\begin{aligned} P\mathrm{-value} &amp;= P(X \geq x_{\text{obs}}) \\ &amp;= 1 - P(X &lt; x_{\text{obs}}) \\ &amp;= 1 - P(X \leq x_{\text{obs}} - 1)\end{aligned}\]
-n &lt;- 10 p0 &lt;- 0.5 xs &lt;- 0:n Ps &lt;- 1-pbinom(xs-1, n, p0) data.frame(xs, Ps) ## xs Ps ## 1 0 1.
-    </div>
-  </div>
-
-        </div>
       
         <div class="relative w-100 w-30-l mb4 bg-white">
           

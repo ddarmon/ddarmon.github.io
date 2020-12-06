@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Practically Insignificant  | How Confident Are We that Masks &#34;Work&#34;? Confidence Functions and the DANMASK-19 Study</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.62.0" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="/dist/css/app.d98f2eb6bcd1eaedb7edf166bd16af26.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="How Confident Are We that Masks &#34;Work&#34;? Confidence Functions and the DANMASK-19 Study" />
+<meta property="og:description" content="Andrew Gelman had an interesting post recently about the DANMISK-19 trial out of Denmark. This study randomized individuals to recieve a mask recommendation and a supply of 50 surgical masks (or not):
+ Encouragement to follow social distancing measures for coronavirus disease 2019, plus either no mask recommendation or a recommendation to wear a mask when outside the home among other persons together with a supply of 50 surgical masks and instructions for proper use." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/draft/confidence-covid-mask-protection/" />
+<meta property="article:published_time" content="2020-12-04T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-12-04T00:00:00+00:00" />
+<meta itemprop="name" content="How Confident Are We that Masks &#34;Work&#34;? Confidence Functions and the DANMASK-19 Study">
+<meta itemprop="description" content="Andrew Gelman had an interesting post recently about the DANMISK-19 trial out of Denmark. This study randomized individuals to recieve a mask recommendation and a supply of 50 surgical masks (or not):
+ Encouragement to follow social distancing measures for coronavirus disease 2019, plus either no mask recommendation or a recommendation to wear a mask when outside the home among other persons together with a supply of 50 surgical masks and instructions for proper use.">
+<meta itemprop="datePublished" content="2020-12-04T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2020-12-04T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="610">
+
+
+
+<meta itemprop="keywords" content="statistics,confidence functions," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="How Confident Are We that Masks &#34;Work&#34;? Confidence Functions and the DANMASK-19 Study"/>
+<meta name="twitter:description" content="Andrew Gelman had an interesting post recently about the DANMISK-19 trial out of Denmark. This study randomized individuals to recieve a mask recommendation and a supply of 50 surgical masks (or not):
+ Encouragement to follow social distancing measures for coronavirus disease 2019, plus either no mask recommendation or a recommendation to wear a mask when outside the home among other persons together with a supply of 50 surgical masks and instructions for proper use."/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Practically Insignificant
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+      
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+
+    <header class="mt4 w-100">
+      <p class="f6 b helvetica tracked">
+          
+        DRAFTS
+      </p>
+      <h1 class="f1 athelas mb1">How Confident Are We that Masks &#34;Work&#34;? Confidence Functions and the DANMASK-19 Study</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2020-12-04T00:00:00Z">December 4, 2020</time>
+      
+      
+    </header>
+
+    <section class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l">
+
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<!--
+
+Time spent:
+
+061220, 30 min
+
+-->
+<p>Andrew Gelman had an interesting <a href="https://statmodeling.stat.columbia.edu/2020/12/04/discussion-of-uncertainties-in-the-coronavirus-mask-study-leads-us-to-think-about-some-issues/">post</a> recently about the <a href="https://www.acpjournals.org/doi/10.7326/M20-6817">DANMISK-19 trial</a> out of Denmark. This study randomized individuals to recieve a mask recommendation and a supply of 50 surgical masks (or not):</p>
+<blockquote>
+<p>Encouragement to follow social distancing measures for coronavirus disease 2019, plus either no mask recommendation or a recommendation to wear a mask when outside the home among other persons together with a supply of 50 surgical masks and instructions for proper use.</p>
+</blockquote>
+<p>From that study’s results synopsis:</p>
+<blockquote>
+<p>A total of 3030 participants were randomly assigned to the recommendation to wear masks, and 2994 were assigned to control; 4862 completed the study. Infection with SARS-CoV-2 occurred in 42 participants recommended masks (1.8%) and 53 control participants (2.1%). The between-group difference was −0.3 percentage point (95% CI, −1.2 to 0.4 percentage point; P = 0.38) (odds ratio, 0.82 [CI, 0.54 to 1.23]; P = 0.33). Multiple imputation accounting for loss to follow-up yielded similar results. Although the difference observed was not statistically significant, the 95% CIs are compatible with a 46% reduction to a 23% increase in infection.</p>
+</blockquote>
+<p>And the synopsis conclusion:</p>
+<blockquote>
+<p>The recommendation to wear surgical masks to supplement other public health measures did not reduce the SARS-CoV-2 infection rate among wearers by more than 50% in a community with modest infection rates, some degree of social distancing, and uncommon general mask use. The data were compatible with lesser degrees of self-protection.</p>
+</blockquote>
+<pre class="r"><code>library(clp)</code></pre>
+<p><span class="math display">\[\begin{aligned} H_{0} &amp;: p_{1} - p_{2} = \delta \\ H_{1} &amp;: p_{1} - p_{2} \neq \delta \end{aligned}\]</span></p>
+<pre class="r"><code># p[1] = rate of SARS-CoV-2 in control arm
+# p[2] = rate of SARS-CoV-2 in intervention arm
+
+x &lt;- c(53, 42)
+n &lt;- c(2470, 2392)
+
+(p&lt;-x/n)</code></pre>
+<pre><code>## [1] 0.02145749 0.01755853</code></pre>
+<pre class="r"><code>conf.diff.props &lt;- clp::prop.conf(x = x, n = n)</code></pre>
+<p><img src="/draft/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-3-1.png" width="672" /><img src="/draft/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-3-2.png" width="672" /></p>
+<pre class="r"><code>conf.diff.props$qconf(0.5)*100</code></pre>
+<pre><code>## [1] 0.3899442</code></pre>
+<pre class="r"><code>conf.diff.props$qconf(c(0.025, 0.975))*100</code></pre>
+<pre><code>## [1] -0.3880645  1.2092257</code></pre>
+<pre class="r"><code>conf.diff.props$pcurve(0)</code></pre>
+<pre><code>## [1] 0.3261612</code></pre>
+<blockquote>
+<p>The between-group difference was −0.3 percentage point (95% CI, −1.2 to 0.4 percentage point; P = 0.38) (odds ratio, 0.82 [CI, 0.54 to 1.23]; P = 0.33).</p>
+</blockquote>
+<p>I attribute the difference between their values and mine to them using a Wald statistic, rather than a score statistic, to construct their intervals and compute their hypothesis tests. I used the (generally better behaved, especially for small risks) <a href="https://www.researchgate.net/publication/233397715_Confidence_intervals_for_the_ratio_and_difference_of_two_binomial_proportions">score statistic</a>.</p>
+<pre class="r"><code>plot.dconf(conf.diff.props,
+           xlab = &#39;p[1] - p[2]&#39;)
+
+x.shade &lt;- seq(0, 0.03, length.out = 100)
+polygon(x = c(0, 
+              x.shade,
+              rev(x.shade),
+              0),
+        y = c(0, 
+              rep(0, length(x.shade)),
+              conf.diff.props$dconf(rev(x.shade)),
+              0),
+        col = rgb(0, 1, 0, alpha = 0.5))</code></pre>
+<p><img src="/draft/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<pre class="r"><code>1-conf.diff.props$pconf(0)</code></pre>
+<pre><code>## [1] 0.8369194</code></pre>
+<p><span class="math display">\[\begin{aligned} H_{0} &amp;: \delta \geq 0 \\ H_{1} &amp;: \delta &lt; 0 \end{aligned}\]</span></p>
+<p><span class="math display">\[\begin{aligned} H_{0} &amp;: \delta \leq 0 \\ H_{1} &amp;: \delta &gt; 0 \end{aligned}\]</span></p>
+<pre class="r"><code>conf.diff.props$pconf(0)</code></pre>
+<pre><code>## [1] 0.1630806</code></pre>
+<p>We can repeat the same analysis with relative risk, defined as
+<span class="math display">\[\begin{aligned} \rho &amp;= \frac{\text{Risk in Treatment}}{\text{Risk in Control}} \\ &amp;= \frac{p_{2}}{p_{1}}   \end{aligned}\]</span></p>
+<pre class="r"><code>conf.rel.risk &lt;- clp::riskratio.conf(x, n)</code></pre>
+<p><img src="/draft/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-10-1.png" width="672" /><img src="/draft/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
+<pre class="r"><code>conf.rel.risk$qconf(0.5)</code></pre>
+<pre><code>## [1] 0.8182709</code></pre>
+<pre class="r"><code>p[2]/p[1]</code></pre>
+<pre><code>## [1] 0.8182937</code></pre>
+<pre class="r"><code>conf.rel.risk$qconf(c(0.025, 0.975))</code></pre>
+<pre><code>## [1] 0.5493596 1.2186575</code></pre>
+<p>So the data are consistent with anywhere from a 45% reduction in risk for the treatment group to a 22% increase in risk for the treatment group. This matches the portion of their results synopsis:</p>
+<blockquote>
+<p>Although the difference observed was not statistically significant, the 95% CIs are compatible with a 46% reduction to a 23% increase in infection.</p>
+</blockquote>
+<p>Though presumably they’re using a Wald statistic rather than a score statistic to compute their confidence interval.</p>
+<pre class="r"><code>conf.rel.risk$pcurve(1)</code></pre>
+<pre><code>## [1] 0.3261612</code></pre>
+<p>Finally, all the same analyses, but using the odds ratio
+<span class="math display">\[\begin{aligned} \omega &amp;= \frac{\text{Odds(Infection; Treatment)}}{\text{Odds(Infection; Control)}} \\ &amp;= \frac{p_{2}/(1 - p_{2})}{p_{1}/(1-p_1)}   \end{aligned}\]</span></p>
+<pre class="r"><code>conf.odds.ratio &lt;- clp::oddsratio.conf(x, n)</code></pre>
+<p><img src="/draft/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-15-1.png" width="672" /><img src="/draft/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-15-2.png" width="672" /></p>
+<pre class="r"><code>conf.odds.ratio$qconf(0.5)</code></pre>
+<pre><code>## [1] 0.8150468</code></pre>
+<pre class="r"><code>odds.control   &lt;- p[1]/(1-p[1])
+odds.treatment &lt;- p[2]/(1-p[2])
+
+odds.treatment/odds.control</code></pre>
+<pre><code>## [1] 0.8150462</code></pre>
+<pre class="r"><code>conf.odds.ratio$qconf(c(0.025, 0.975))</code></pre>
+<pre><code>## [1] 0.541522 1.226716</code></pre>
+<pre class="r"><code>conf.odds.ratio$pcurve(1)</code></pre>
+<pre><code>## [1] 0.3269062</code></pre>
+<ul class="pa0">
+  
+   <li class="list">
+     <a href="/tags/statistics" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">statistics</a>
+   </li>
+  
+   <li class="list">
+     <a href="/tags/confidence-functions" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">confidence functions</a>
+   </li>
+  
+</ul>
+<div class="mt6">
+      
+      
+      </div>
+    </section>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="/post/the-land-of-lost-significance-exact-tests-with-discrete-test-statistics/">Quantum Statistics: Exact Tests with Discrete Test Statistics</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="/post/salvaging-lost-significance-via-randomization-randomized-p-values-for-discrete-test-statistics/">Salvaging Lost Significance via Randomization: Randomized \(P\)-values for Discrete Test Statistics</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="/" >
+    &copy; 2020 Practically Insignificant
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

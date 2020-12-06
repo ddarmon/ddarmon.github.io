@@ -9,10 +9,10 @@
     <lastBuildDate>Fri, 04 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>How Confident Are We that Masks &#34;Work&#34;? Confidence Functions and the DANMASK-19 Study</title>
-      <link>/post/confidence-covid-mask-protection/</link>
+      <link>/draft/confidence-covid-mask-protection/</link>
       <pubDate>Fri, 04 Dec 2020 00:00:00 +0000</pubDate>
       
-      <guid>/post/confidence-covid-mask-protection/</guid>
+      <guid>/draft/confidence-covid-mask-protection/</guid>
       <description>
 
 
@@ -21,35 +21,91 @@
 
 Time spent:
 
+061220, 30 min
+
 --&gt;
-&lt;p&gt;&lt;a href=&#34;https://statmodeling.stat.columbia.edu/2020/12/04/discussion-of-uncertainties-in-the-coronavirus-mask-study-leads-us-to-think-about-some-issues/&#34;&gt;Gelman’s post&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Andrew Gelman had an interesting &lt;a href=&#34;https://statmodeling.stat.columbia.edu/2020/12/04/discussion-of-uncertainties-in-the-coronavirus-mask-study-leads-us-to-think-about-some-issues/&#34;&gt;post&lt;/a&gt; recently about the &lt;a href=&#34;https://www.acpjournals.org/doi/10.7326/M20-6817&#34;&gt;DANMISK-19 trial&lt;/a&gt; out of Denmark. This study randomized individuals to recieve a mask recommendation and a supply of 50 surgical masks (or not):&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Encouragement to follow social distancing measures for coronavirus disease 2019, plus either no mask recommendation or a recommendation to wear a mask when outside the home among other persons together with a supply of 50 surgical masks and instructions for proper use.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;From that study’s results synopsis:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A total of 3030 participants were randomly assigned to the recommendation to wear masks, and 2994 were assigned to control; 4862 completed the study. Infection with SARS-CoV-2 occurred in 42 participants recommended masks (1.8%) and 53 control participants (2.1%). The between-group difference was −0.3 percentage point (95% CI, −1.2 to 0.4 percentage point; P = 0.38) (odds ratio, 0.82 [CI, 0.54 to 1.23]; P = 0.33). Multiple imputation accounting for loss to follow-up yielded similar results. Although the difference observed was not statistically significant, the 95% CIs are compatible with a 46% reduction to a 23% increase in infection.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;And the synopsis conclusion:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The recommendation to wear surgical masks to supplement other public health measures did not reduce the SARS-CoV-2 infection rate among wearers by more than 50% in a community with modest infection rates, some degree of social distancing, and uncommon general mask use. The data were compatible with lesser degrees of self-protection.&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(clp)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} H_{0} &amp;amp;: p_{1} - p_{2} = \delta \\ H_{1} &amp;amp;: p_{1} - p_{2} \neq \delta \end{aligned}\]&lt;/span&gt;&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# p[1] = rate of SARS-CoV-2 in control arm
 # p[2] = rate of SARS-CoV-2 in intervention arm
 
 x &amp;lt;- c(53, 42)
 n &amp;lt;- c(2470, 2392)
 
-conf.diff.props &amp;lt;- clp::prop.conf(x = x, n = n)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-2-1.png&#34; width=&#34;672&#34; /&gt;&lt;img src=&#34;/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-2-2.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+(p&amp;lt;-x/n)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.02145749 0.01755853&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.diff.props &amp;lt;- clp::prop.conf(x = x, n = n)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/draft/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;672&#34; /&gt;&lt;img src=&#34;/draft/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-3-2.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.diff.props$qconf(0.5)*100&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] 0.3899442&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.diff.props$qconf(c(0.025, 0.975))*100&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] -0.3880645  1.2092257&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.diff.props$pcurve(0)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] 0.3261612&lt;/code&gt;&lt;/pre&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The between-group difference was −0.3 percentage point (95% CI, −1.2 to 0.4 percentage point; P = 0.38) (odds ratio, 0.82 [CI, 0.54 to 1.23]; P = 0.33).&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;I attribute the difference between their values and mine to them using a Wald statistic, rather than a score statistic, to construct their intervals and compute their hypothesis tests. I used the (generally better behaved, especially for small risks) &lt;a href=&#34;https://www.researchgate.net/publication/233397715_Confidence_intervals_for_the_ratio_and_difference_of_two_binomial_proportions&#34;&gt;score statistic&lt;/a&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;plot.dconf(conf.diff.props,
+           xlab = &amp;#39;p[1] - p[2]&amp;#39;)
+
+x.shade &amp;lt;- seq(0, 0.03, length.out = 100)
+polygon(x = c(0, 
+              x.shade,
+              rev(x.shade),
+              0),
+        y = c(0, 
+              rep(0, length(x.shade)),
+              conf.diff.props$dconf(rev(x.shade)),
+              0),
+        col = rgb(0, 1, 0, alpha = 0.5))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/draft/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-7-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;1-conf.diff.props$pconf(0)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.8369194&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} H_{0} &amp;amp;: \delta \geq 0 \\ H_{1} &amp;amp;: \delta &amp;lt; 0 \end{aligned}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} H_{0} &amp;amp;: \delta \leq 0 \\ H_{1} &amp;amp;: \delta &amp;gt; 0 \end{aligned}\]&lt;/span&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.diff.props$pconf(0)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.1630806&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can repeat the same analysis with relative risk, defined as
+&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} \rho &amp;amp;= \frac{\text{Risk in Treatment}}{\text{Risk in Control}} \\ &amp;amp;= \frac{p_{2}}{p_{1}}   \end{aligned}\]&lt;/span&gt;&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.rel.risk &amp;lt;- clp::riskratio.conf(x, n)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;img src=&#34;/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-5-2.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/draft/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-10-1.png&#34; width=&#34;672&#34; /&gt;&lt;img src=&#34;/draft/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-10-2.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.rel.risk$qconf(0.5)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] 0.8182709&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;p[2]/p[1]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.8182937&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.rel.risk$qconf(c(0.025, 0.975))&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] 0.5493596 1.2186575&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;So the data are consistent with anywhere from a 45% reduction in risk for the treatment group to a 22% increase in risk for the treatment group. This matches the portion of their results synopsis:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Although the difference observed was not statistically significant, the 95% CIs are compatible with a 46% reduction to a 23% increase in infection.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Though presumably they’re using a Wald statistic rather than a score statistic to compute their confidence interval.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.rel.risk$pcurve(1)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] 0.3261612&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Finally, all the same analyses, but using the odds ratio
+&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} \omega &amp;amp;= \frac{\text{Odds(Infection; Treatment)}}{\text{Odds(Infection; Control)}} \\ &amp;amp;= \frac{p_{2}/(1 - p_{2})}{p_{1}/(1-p_1)}   \end{aligned}\]&lt;/span&gt;&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.odds.ratio &amp;lt;- clp::oddsratio.conf(x, n)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-8-1.png&#34; width=&#34;672&#34; /&gt;&lt;img src=&#34;/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-8-2.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/draft/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-15-1.png&#34; width=&#34;672&#34; /&gt;&lt;img src=&#34;/draft/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-15-2.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.odds.ratio$qconf(0.5)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] 0.8150468&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;odds.control   &amp;lt;- p[1]/(1-p[1])
+odds.treatment &amp;lt;- p[2]/(1-p[2])
+
+odds.treatment/odds.control&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.8150462&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.odds.ratio$qconf(c(0.025, 0.975))&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] 0.541522 1.226716&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.odds.ratio$pcurve(1)&lt;/code&gt;&lt;/pre&gt;
@@ -59,10 +115,10 @@ conf.diff.props &amp;lt;- clp::prop.conf(x = x, n = n)&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>Mid P-values</title>
-      <link>/post/mid-p-values/</link>
+      <link>/draft/mid-p-values/</link>
       <pubDate>Mon, 29 Jun 2020 00:00:00 +0000</pubDate>
       
-      <guid>/post/mid-p-values/</guid>
+      <guid>/draft/mid-p-values/</guid>
       <description>
 
 
