@@ -6,19 +6,55 @@
     <description>Recent content on Practically Insignificant</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 04 Dec 2020 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Fri, 04 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>How Confident Are We that Masks &#34;Work&#34;? Confidence Functions and the DANMASK-19 Study</title>
       <link>/post/confidence-covid-mask-protection/</link>
       <pubDate>Fri, 04 Dec 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/confidence-covid-mask-protection/</guid>
-      <description>Gelman’s post
-library(clp) # p[1] = rate of SARS-CoV-2 in control arm # p[2] = rate of SARS-CoV-2 in intervention arm x &amp;lt;- c(53, 42) n &amp;lt;- c(2470, 2392) conf.diff.props &amp;lt;- clp::prop.conf(x = x, n = n) conf.diff.props$qconf(0.5)*100 ## [1] 0.3899442 conf.diff.props$qconf(c(0.025, 0.975))*100 ## [1] -0.3880645 1.2092257 conf.diff.props$pcurve(0) ## [1] 0.3261612 conf.rel.risk &amp;lt;- clp::riskratio.conf(x, n) conf.rel.risk$qconf(0.5) ## [1] 0.8182709 conf.rel.risk$qconf(c(0.025, 0.975)) ## [1] 0.5493596 1.2186575 conf.rel.risk$pcurve(1) ## [1] 0.</description>
+      <description>
+
+
+&lt;script src=&#39;https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML&#39;&gt;&lt;/script&gt;
+&lt;!--
+
+Time spent:
+
+--&gt;
+&lt;p&gt;&lt;a href=&#34;https://statmodeling.stat.columbia.edu/2020/12/04/discussion-of-uncertainties-in-the-coronavirus-mask-study-leads-us-to-think-about-some-issues/&#34;&gt;Gelman’s post&lt;/a&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(clp)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# p[1] = rate of SARS-CoV-2 in control arm
+# p[2] = rate of SARS-CoV-2 in intervention arm
+
+x &amp;lt;- c(53, 42)
+n &amp;lt;- c(2470, 2392)
+
+conf.diff.props &amp;lt;- clp::prop.conf(x = x, n = n)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-2-1.png&#34; width=&#34;672&#34; /&gt;&lt;img src=&#34;/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-2-2.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.diff.props$qconf(0.5)*100&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.3899442&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.diff.props$qconf(c(0.025, 0.975))*100&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] -0.3880645  1.2092257&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.diff.props$pcurve(0)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.3261612&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.rel.risk &amp;lt;- clp::riskratio.conf(x, n)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;img src=&#34;/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-5-2.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.rel.risk$qconf(0.5)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.8182709&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.rel.risk$qconf(c(0.025, 0.975))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.5493596 1.2186575&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.rel.risk$pcurve(1)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.3261612&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.odds.ratio &amp;lt;- clp::oddsratio.conf(x, n)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-8-1.png&#34; width=&#34;672&#34; /&gt;&lt;img src=&#34;/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-8-2.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.odds.ratio$qconf(0.5)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.8150468&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.odds.ratio$qconf(c(0.025, 0.975))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.541522 1.226716&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.odds.ratio$pcurve(1)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.3269062&lt;/code&gt;&lt;/pre&gt;
+</description>
     </item>
     
     <item>
@@ -27,11 +63,82 @@ library(clp) # p[1] = rate of SARS-CoV-2 in control arm # p[2] = rate of SARS-Co
       <pubDate>Mon, 29 Jun 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/mid-p-values/</guid>
-      <description>Mid-\(P\) Confidence Intervals: A Brief Review by Berry and Armitage.
-\[\begin{aligned} H_{0} &amp;amp;: p \leq 1/2\\ H_{1} &amp;amp;: p &amp;gt; 1/2 \end{aligned}\]
-\[P\mathrm{-value} = P(X \geq x_{\text{obs}})\]
-\[\begin{aligned} P\mathrm{-value} &amp;amp;= P(X \geq x_{\text{obs}}) \\ &amp;amp;= 1 - P(X &amp;lt; x_{\text{obs}}) \\ &amp;amp;= 1 - P(X \leq x_{\text{obs}} - 1)\end{aligned}\]
-n &amp;lt;- 10 p0 &amp;lt;- 0.5 xs &amp;lt;- 0:n Ps &amp;lt;- 1-pbinom(xs-1, n, p0) data.frame(xs, Ps) ## xs Ps ## 1 0 1.</description>
+      <description>
+
+
+&lt;script src=&#39;https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML&#39;&gt;&lt;/script&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.jstor.org/stable/2348891#metadata_info_tab_contents&#34;&gt;Mid-&lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt; Confidence Intervals: A Brief Review&lt;/a&gt; by Berry and Armitage.&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} H_{0} &amp;amp;: p \leq 1/2\\ H_{1} &amp;amp;: p &amp;gt; 1/2 \end{aligned}\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[P\mathrm{-value} = P(X \geq x_{\text{obs}})\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} P\mathrm{-value} &amp;amp;= P(X \geq x_{\text{obs}}) \\ &amp;amp;= 1 - P(X &amp;lt; x_{\text{obs}}) \\ &amp;amp;= 1 - P(X \leq x_{\text{obs}} - 1)\end{aligned}\]&lt;/span&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;n &amp;lt;- 10
+p0 &amp;lt;- 0.5
+
+xs &amp;lt;- 0:n
+
+Ps &amp;lt;- 1-pbinom(xs-1, n, p0)
+
+data.frame(xs, Ps)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##    xs           Ps
+## 1   0 1.0000000000
+## 2   1 0.9990234375
+## 3   2 0.9892578125
+## 4   3 0.9453125000
+## 5   4 0.8281250000
+## 6   5 0.6230468750
+## 7   6 0.3769531250
+## 8   7 0.1718750000
+## 9   8 0.0546875000
+## 10  9 0.0107421875
+## 11 10 0.0009765625&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} p_{m}(x) &amp;amp;= P(X &amp;gt; x_{\text{obs}}) + \frac{1}{2} P(X = x_{\text{obs}}) \\ &amp;amp;= P(X \geq x_{\text{obs}}) - \frac{1}{2} P(X = x_{\text{obs}}) \end{aligned}\]&lt;/span&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;n &amp;lt;- 10
+p0 &amp;lt;- 0.5
+
+xs &amp;lt;- 0:n
+
+Ps.mid &amp;lt;- (1 - pbinom(xs-1, n, p0)) - 0.5*dbinom(xs, n, p0)
+
+data.frame(xs, Ps, Ps.mid)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##    xs           Ps       Ps.mid
+## 1   0 1.0000000000 0.9995117188
+## 2   1 0.9990234375 0.9941406250
+## 3   2 0.9892578125 0.9672851562
+## 4   3 0.9453125000 0.8867187500
+## 5   4 0.8281250000 0.7255859375
+## 6   5 0.6230468750 0.5000000000
+## 7   6 0.3769531250 0.2744140625
+## 8   7 0.1718750000 0.1132812500
+## 9   8 0.0546875000 0.0327148438
+## 10  9 0.0107421875 0.0058593750
+## 11 10 0.0009765625 0.0004882812&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;sum(Ps*dbinom(xs, n, p0))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.5880985&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;sum(Ps.mid*dbinom(xs, n, p0))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.5&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;t1er.mid.p &amp;lt;- function(alpha){
+  sum(dbinom(xs, n, p0)[Ps.mid &amp;lt;= alpha])
+}
+
+t1er.mid.p &amp;lt;- Vectorize(t1er.mid.p)
+
+t1er.exact.p &amp;lt;- function(alpha){
+  sum(dbinom(xs, n, p0)[Ps &amp;lt;= alpha])
+}
+
+t1er.exact.p &amp;lt;- Vectorize(t1er.exact.p)
+
+curve(t1er.mid.p, from = 0, to = 1, n = 2001,
+      xlab = &amp;#39;Nominal Significance Level&amp;#39;, ylab = &amp;#39;Type I Error Rate&amp;#39;, col = &amp;#39;red&amp;#39;)
+curve(t1er.exact.p, col = &amp;#39;blue&amp;#39;, n = 2001, add = TRUE, lty = 2)
+curve(punif, add = TRUE, lty = 3)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-06-29-mid-p-values_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;curve(t1er.mid.p(x) - x, from = 0, to = 0.1, n = 2001,
+      xlab = &amp;#39;Nominal Significance Level&amp;#39;, ylab = &amp;#39;T1ER - Nominal Rate&amp;#39;, col = &amp;#39;red&amp;#39;)
+curve(t1er.exact.p(x) - x, col = &amp;#39;blue&amp;#39;, n = 2001, add = TRUE, lty = 2)
+abline(h = 0, lty = 3)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-06-29-mid-p-values_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+</description>
     </item>
     
     <item>
@@ -40,7 +147,100 @@ n &amp;lt;- 10 p0 &amp;lt;- 0.5 xs &amp;lt;- 0:n Ps &amp;lt;- 1-pbinom(xs-1, n, 
       <pubDate>Sun, 28 Jun 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/the-land-of-lost-significance-exact-tests-with-discrete-test-statistics/</guid>
-      <description>For those who ended up here looking for information about quantum statistical mechanics or particle statistics: apologies! But sometimes I feel like physicists took all the exciting names, so I’m stealing the term quanta as it relates to an observable that can take on only discrete (not continuous values). That has interesting consequences for inferential procedures based on such discrete (“quantum”) statistics, as we will see in this post.</description>
+      <description>
+
+
+&lt;script src=&#39;https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML&#39;&gt;&lt;/script&gt;
+&lt;!--
+
+Time spent:
+
+280620, 22 minutes
+280620, 34 minutes
+280620, 30 minutes
+
+--&gt;
+&lt;p&gt;For those who ended up here looking for information about &lt;a href=&#34;https://en.wikipedia.org/wiki/Quantum_statistical_mechanics&#34;&gt;quantum statistical mechanics&lt;/a&gt; or &lt;a href=&#34;https://en.wikipedia.org/wiki/Particle_statistics&#34;&gt;particle statistics&lt;/a&gt;: apologies! But sometimes I feel like physicists took all the exciting names, so I’m stealing the term quanta as it relates to an observable that can take on only discrete (not continuous values). That has interesting consequences for inferential procedures based on such discrete (“quantum”) statistics, as we will see in this post.&lt;/p&gt;
+&lt;p&gt;Consider performing a hypothesis test for a binomial proportion &lt;span class=&#34;math inline&#34;&gt;\(p\)&lt;/span&gt;. For example, imagine that you want to come to a tentative conclusion about the bias of a coin after flipping it 10 times.&lt;/p&gt;
+&lt;p&gt;Let &lt;span class=&#34;math inline&#34;&gt;\(X\)&lt;/span&gt; be the number of times that the coin comes up heads out of 10 flips. Then &lt;span class=&#34;math inline&#34;&gt;\(X \sim \mathrm{Binom}(n = 10, p)\)&lt;/span&gt; where &lt;span class=&#34;math inline&#34;&gt;\(p\)&lt;/span&gt; is the bias of the coin to come up heads. We really want to show that the bias of the coin is smaller than a certain value &lt;span class=&#34;math inline&#34;&gt;\(p_{0}\)&lt;/span&gt;, but we do not want to reject that the bias is greater than or equal to &lt;span class=&#34;math inline&#34;&gt;\(p_{0}\)&lt;/span&gt; too easily. So we set up the left-sided hypothesis test:
+&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} H_{0} &amp;amp;: p \geq p_{0} \\ H_{1} &amp;amp;: p &amp;lt; p_{0} \end{aligned}.\]&lt;/span&gt;
+We will take &lt;span class=&#34;math inline&#34;&gt;\(x_{\mathrm{obs}}\)&lt;/span&gt;, the number of observed heads out of our 10 flips, as our test statistic: the smaller the number of heads, the more evidence against the null hypothesis. We are too lazy to set up a rejection region, so we will resort to using a &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value instead. Recalling that the &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value is the probability of a test statistic as extreme or more extreme than the observed test statistic when the null hypothesis is true, we find that the &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value is
+&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} P(x_{\mathrm{obs}}) &amp;amp;= \sup_{p \geq p_{0}} P_{p}(X \leq x_{\mathrm{obs}}) \\ &amp;amp;= P_{p_{0}}(X \leq x_{\mathrm{obs}}) \end{aligned}\]&lt;/span&gt;
+Now to perform a classical hypothesis test, we use the &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value as usual. We set up a significance level &lt;span class=&#34;math inline&#34;&gt;\(\alpha\)&lt;/span&gt;, and reject the null hypothesis whenever our &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value is less than or equal to &lt;span class=&#34;math inline&#34;&gt;\(\alpha\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;If we were dealing with a continuous test statistic, the analysis we did would be done. The &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value would be less than or equal to &lt;span class=&#34;math inline&#34;&gt;\(\alpha\)&lt;/span&gt; a proportion &lt;span class=&#34;math inline&#34;&gt;\(\alpha\)&lt;/span&gt; of the time when &lt;span class=&#34;math inline&#34;&gt;\(p = p_{0}\)&lt;/span&gt;, and even more often when &lt;span class=&#34;math inline&#34;&gt;\(p \geq p_{0}\)&lt;/span&gt;, so our worst Type I Error Rate would be &lt;span class=&#34;math inline&#34;&gt;\(\alpha\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;But something is different with discrete test statistics. Let’s create a plot of the possible &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-values as a function of both the observed test statistic &lt;span class=&#34;math inline&#34;&gt;\(x_{\mathrm{obs}}\)&lt;/span&gt; (which is colored from blue when &lt;span class=&#34;math inline&#34;&gt;\(x_{\mathrm{obs}} = 0\)&lt;/span&gt; to red when &lt;span class=&#34;math inline&#34;&gt;\(x_{\mathrm{obs}} = n\)&lt;/span&gt;) and the null value &lt;span class=&#34;math inline&#34;&gt;\(p_{0}\)&lt;/span&gt; we want to test. We’ll create a function so we can eventually change &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt; to values other than 10:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;p.value.plot &amp;lt;- function(n, alpha = 0.05, p0 = 1/2){
+  xs &amp;lt;- 0:n
+
+  cols &amp;lt;- colorspace::diverge_hcl(length(xs))
+  
+  plot(0, 0, cex = 0, xlim = c(0, 1), ylim = c(0, 1),
+       xlab = expression(italic(p[0])),
+       ylab = expression(italic(P)[italic(p)[0]](italic(X) &amp;lt;= italic(x)[obs])))
+  for (x.ind in 1:length(xs)){
+    x &amp;lt;- xs[x.ind]
+    curve(pbinom(x, n, p), 
+          xname = &amp;#39;p&amp;#39;, add = TRUE, col = cols[x.ind],
+          n = 2001)
+  }
+  abline(h = alpha, v = p0, lty = 3)
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Running this, we get 11 curves, since &lt;span class=&#34;math inline&#34;&gt;\(x_{\mathrm{obs}}\)&lt;/span&gt; can range from 0 to 10:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;n &amp;lt;- 10
+p.value.plot(n)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-06-28-the-land-of-lost-significance-exact-tests-with-discrete-test-statistics_files/figure-html/unnamed-chunk-2-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The vertical line gives us a slice through the &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-values when we want to test that &lt;span class=&#34;math inline&#34;&gt;\(p &amp;lt; 1/2\)&lt;/span&gt;. The horizontal line shows a desired significance level of &lt;span class=&#34;math inline&#34;&gt;\(\alpha = 0.05\)&lt;/span&gt; (the favorite number of significance fetishists). And we notice something a bit shocking: if we reject when our &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value is less than or equal to &lt;span class=&#34;math inline&#34;&gt;\(\alpha = 0.05\)&lt;/span&gt;, we won’t reject precisely 5% of the time under the worst-case null hypothesis. Instead, we’ll reject something closer to 1% of the time: the size of our test is actually smaller than what we set out to have! The actual size of our test is the largest &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value that is less than or equal to &lt;span class=&#34;math inline&#34;&gt;\(\alpha\)&lt;/span&gt;, which we see is the &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value corresponding to &lt;span class=&#34;math inline&#34;&gt;\(x_{\mathrm{obs}} = 1\)&lt;/span&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;pbinom(1, n, 1/2) # A wee bit too big&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.01074219&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If we took the &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value for &lt;span class=&#34;math inline&#34;&gt;\(x_{\mathrm{obs}} = 2\)&lt;/span&gt;, that would be just a bit too big:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;pbinom(2, n, 1/2) # A wee bit too small&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.0546875&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The actual size of our test is therefore &lt;span class=&#34;math inline&#34;&gt;\(\approx 0.011\)&lt;/span&gt;, Thus, we have “lost” an amount &lt;span class=&#34;math inline&#34;&gt;\(0.05 - 0.011 = 0.039\)&lt;/span&gt; of the desired significance!&lt;/p&gt;
+&lt;p&gt;Moreover, we see something else: sometimes &lt;strong&gt;none&lt;/strong&gt; of the &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-values will be less than our significance level! For example, if we wanted to take our null &lt;span class=&#34;math inline&#34;&gt;\(p_{0}\)&lt;/span&gt; to be 0.2:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;p.value.plot(n, p0 = 0.2)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-06-28-the-land-of-lost-significance-exact-tests-with-discrete-test-statistics_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;we see that none of the &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-values are less than or equal to &lt;span class=&#34;math inline&#34;&gt;\(\alpha = 0.05\)&lt;/span&gt;. Thus, we would never reject the null hypothesis, and our Type I Error Rate would, by definition, be 0%: we’ll never reject the null hypothesis when it is true because we’ll never reject the null hypothesis!&lt;/p&gt;
+&lt;p&gt;The problem here is that, because the test statistic is discrete, and thus can take on only discrete values, the &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value, which is just a particular function of the test statistic, is also discrete. Quantum statistics, as promised! The problem begins to go away as the sample size increases (in this case, as we flip more and more coins). In the limit, in fact, we know the problem must completely go away, since a binomial random variable will converge, by the &lt;a href=&#34;https://en.wikipedia.org/wiki/Central_limit_theorem&#34;&gt;Central Limit Theorem&lt;/a&gt;, on a &lt;a href=&#34;https://en.wikipedia.org/wiki/Normal_distribution&#34;&gt;Gaussian random variable&lt;/a&gt;. We can see that by creating a new plot where we consider flipping 100, rather than just 10, coins:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;n &amp;lt;- 100
+p.value.plot(n)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-06-28-the-land-of-lost-significance-exact-tests-with-discrete-test-statistics_files/figure-html/unnamed-chunk-6-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Clearly the &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-values are beginning to fill up the continuum from 0 to 1, especially so near where &lt;span class=&#34;math inline&#34;&gt;\(p_{0} = 1/2\)&lt;/span&gt;. In this case, we can find the actual size of our test when we use &lt;span class=&#34;math inline&#34;&gt;\(\alpha = 0.05\)&lt;/span&gt; in the same way: find the largest &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value that is still less than or equal to 0.05:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;xs &amp;lt;- 0:n
+Ps &amp;lt;- pbinom(xs, n, 1/2)
+
+x.star &amp;lt;- tail(xs[which(Ps &amp;lt;= 0.05)], 1)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And again, this gives us a &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value that is a bit too small:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;pbinom(x.star, n, 1/2)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.04431304&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;but the next largest &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value is a bit too big:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;pbinom(x.star+1, n, 1/2)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 0.06660531&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;In fact, we can see how the actual size of the test using &lt;span class=&#34;math inline&#34;&gt;\(\alpha = 0.05\)&lt;/span&gt; as our cutoff varies as we increase &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;find.size = function(n, alpha = 0.05, p0 = 1/2){
+  xs &amp;lt;- 0:n
+  Ps &amp;lt;- pbinom(xs, n, p0)
+  
+  tail(Ps[Ps &amp;lt;= alpha], 1)
+}
+
+find.size &amp;lt;- Vectorize(find.size, vectorize.args = &amp;#39;n&amp;#39;)
+
+ns &amp;lt;- 1:200
+
+plot(ns, find.size(ns), ylim = c(0, 0.05), type = &amp;#39;b&amp;#39;, pch = 16, cex = 0.5,
+     xlab = expression(italic(n)), ylab = expression(Size(italic(n))))
+abline(h = 0.05, lty = 3)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-06-28-the-land-of-lost-significance-exact-tests-with-discrete-test-statistics_files/figure-html/unnamed-chunk-10-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;We see that, by construction, the actual size is always less than or equal to 0.05, and it gets closer, but in a sawtooth way, to the desired significance level. If we take &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt; to be quite large, we see:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ns &amp;lt;- 1:2000
+
+plot(ns, find.size(ns), ylim = c(0, 0.05), type = &amp;#39;b&amp;#39;, pch = 16, cex = 0.5,
+     xlab = expression(italic(n)), ylab = expression(Size(italic(n))))
+abline(h = 0.05, lty = 3)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-06-28-the-land-of-lost-significance-exact-tests-with-discrete-test-statistics_files/figure-html/unnamed-chunk-11-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;so the size, at least for certain values of &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt;, only &lt;strong&gt;very slowly&lt;/strong&gt; approaches the desired significance level.&lt;/p&gt;
+&lt;p&gt;There’s almost certainly some interesting mathematics in the limiting behavior of the size of this test, and that mathematics has almost certainly been explored! But we will leave that for now. In the next two posts, we will discuss methods for handling the conservativeness of tests that rely on discrete test statistics: randomized rejection and mid &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-values.&lt;/p&gt;
+</description>
     </item>
     
     <item>
@@ -49,7 +249,67 @@ n &amp;lt;- 10 p0 &amp;lt;- 0.5 xs &amp;lt;- 0:n Ps &amp;lt;- 1-pbinom(xs-1, n, 
       <pubDate>Sun, 28 Jun 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/salvaging-lost-significance-via-randomization-randomized-p-values-for-discrete-test-statistics/</guid>
-      <description>Last time, we saw that when performing a hypothesis test with a discrete test statistic, we will typically lose size unless we happen to be very lucky and have the significance level \(\alpha\) exactly match one of our possible \(P\)-values. In this post, I will introduce a randomized hypothesis test that will regain the size we lost. Unlike a lot of randomization in statistics, the randomization here comes at the end: we randomize the \(P\)-value in order to recover the size.</description>
+      <description>
+
+
+&lt;script src=&#39;https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML&#39;&gt;&lt;/script&gt;
+&lt;!-- 
+
+280620, 57 min
+
+--&gt;
+&lt;p&gt;Last time, we saw that when performing a hypothesis test with a discrete test statistic, we will typically lose size unless we happen to be very lucky and have the significance level &lt;span class=&#34;math inline&#34;&gt;\(\alpha\)&lt;/span&gt; exactly match one of our possible &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-values. In this post, I will introduce a randomized hypothesis test that will regain the size we lost. Unlike a lot of randomization in statistics, the randomization here comes at the end: we randomize the &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value in order to recover the size. In many cases (ideally!), experimentalists use randomization at the beginning of their experiment, by (ideally) randomly sampling from a population and then randomly assigning units to a treatment. But the extra step of randomizing at the end, when they’re eagerly awaiting to find out whether they’ve been so-blessed with significance stars, they may balk at randomization, even though it makes their test more powerful. I will allow them their balking (I might, too, if my career depended on accumulating many, many stickers), and in the next post I will discuss a method that gets rid of the random element of randomized &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-values while still guarding against the conservativeness of the test.&lt;/p&gt;
+&lt;p&gt;For this exercise, let’s consider a right-sided test. (Why? Because I had already made all the figures and schematics for a right-sided test before writing the last post, and don’t want to remake them for the left-sided test!) Again, consider the case of performing a hypothesis test
+&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} H_{0} &amp;amp;: p \leq p_{0} \\ H_{1} &amp;amp;: p &amp;gt; p_{0}\end{aligned}\]&lt;/span&gt;
+for a binomial proportion &lt;span class=&#34;math inline&#34;&gt;\(p\)&lt;/span&gt; using a binomial random variable &lt;span class=&#34;math inline&#34;&gt;\(X \sim \mathrm{Binom}(n, p)\)&lt;/span&gt;. The classical right-sided &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value is then
+&lt;span class=&#34;math display&#34;&gt;\[P = P_{p_{0}}(X \geq x_{\mathrm{obs}}).\]&lt;/span&gt;
+We know that this will, generally, be slightly too small at a boundary value of &lt;span class=&#34;math inline&#34;&gt;\(x_{\mathrm{obs}}\)&lt;/span&gt;: the difference between the largest &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value less than or equal to &lt;span class=&#34;math inline&#34;&gt;\(\alpha\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(\alpha\)&lt;/span&gt; will be non-zero unless we happen to have a “nice” sample size where that &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value is close to &lt;span class=&#34;math inline&#34;&gt;\(\alpha\)&lt;/span&gt;. But we also know that &lt;span class=&#34;math inline&#34;&gt;\(P_{p_{0}}(X &amp;gt; x_{\mathrm{obs}})\)&lt;/span&gt; will be slightly too big, since this is the first &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value that is stricly greater than &lt;span class=&#34;math inline&#34;&gt;\(\alpha\)&lt;/span&gt;. The idea of a randomized &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value is to add a little fuzz to the classical right-sided &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value that will place us somewhere between &lt;span class=&#34;math inline&#34;&gt;\(P_{p_{0}}(X \geq x_{\mathrm{obs}})\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(P_{p_{0}}(X &amp;gt; x_{\mathrm{obs}})\)&lt;/span&gt;. That is, the randomized &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value is
+&lt;span class=&#34;math display&#34;&gt;\[P_{\mathrm{rand}} = P_{p_{0}}(X &amp;gt; x_{\mathrm{obs}}) + U \times P_{p_{0}}(X = x_{\mathrm{obs}})\]&lt;/span&gt;
+where &lt;span class=&#34;math inline&#34;&gt;\(U\)&lt;/span&gt; is a uniform random variable on &lt;span class=&#34;math inline&#34;&gt;\((0, 1)\)&lt;/span&gt; that is independent of &lt;span class=&#34;math inline&#34;&gt;\(X\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;Why does this work? Consider the sketch below, which shows the survival function &lt;span class=&#34;math inline&#34;&gt;\(S(k) = P(X &amp;gt; k)\)&lt;/span&gt; and its left-continuous analog &lt;span class=&#34;math inline&#34;&gt;\(S(k^{-}) = P(X \geq k)\)&lt;/span&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;n &amp;lt;- 10
+p &amp;lt;- 0.5
+
+alpha = 0.4
+
+ns &amp;lt;- 0:n
+
+Ss &amp;lt;- pbinom(ns, n, p, lower.tail = FALSE)
+
+par(mar=c(5,5,2,1), cex.lab = 2, cex.axis = 2)
+plot(ns, Ss, type = &amp;#39;s&amp;#39;,
+     xlab = expression(italic(k)), ylab = &amp;#39;Probability&amp;#39;)
+
+Ss.p1 &amp;lt;- Ss + dbinom(ns, n, p)
+points(ns, Ss, col = &amp;#39;blue&amp;#39;, pch = 16)
+lines(ns, Ss.p1, col = &amp;#39;red&amp;#39;, type = &amp;#39;p&amp;#39;, pch = 16)
+
+abline(h = alpha, lty = 3, col = &amp;#39;purple&amp;#39;)
+abline(h = c(0, 1), lty = 3)
+abline(v = c(0, n), lty = 3)
+
+legend(&amp;#39;topright&amp;#39;, legend = c(expression(P(italic(X) &amp;gt;= italic(k))),
+                              expression(P(italic(X) &amp;gt; italic(k)))),
+       col = c(&amp;#39;red&amp;#39;, &amp;#39;blue&amp;#39;), pch = 1, cex = 1.2)
+
+arrows(0.5, 0, 0.5, alpha, code = 3, col = &amp;#39;purple&amp;#39;, lwd = 2, length = 0.15)
+text(x = 0.5, y = alpha+0.05, labels = expression(alpha), col = &amp;#39;purple&amp;#39;, cex = 2)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-06-28-salvaging-lost-significance-via-randomization-randomized-p-values-for-discrete-test-statistics_files/figure-html/unnamed-chunk-1-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+Here, &lt;span class=&#34;math inline&#34;&gt;\(S(k^{-})\)&lt;/span&gt; is the classical &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value, &lt;span class=&#34;math inline&#34;&gt;\(S(k)\)&lt;/span&gt; is the “too large” &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value, and the randomized &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value interpolates (randomly) between the classical &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value and the too small &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value:
+&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} P_{\mathrm{rand}} &amp;amp;= P_{p_{0}}(X &amp;gt; x_{\mathrm{obs}}) + U \times P_{p_{0}}(X = x_{\mathrm{obs}}) \\ &amp;amp;= (1 - U) \times P_{p_{0}}(X &amp;gt; x_{\mathrm{obs}}) + U \times P_{p_{0}}(X \geq x_{\mathrm{obs}}) \\ &amp;amp;= (1-U) S(x_{\mathrm{obs}}) + U S(x_{\mathrm{obs}}^{-}). \end{aligned}\]&lt;/span&gt;
+The only place where the randomization has any effect occurs where the interpolating line crosses &lt;span class=&#34;math inline&#34;&gt;\(\alpha\)&lt;/span&gt;; otherwise, anywhere we lie on the interpolating line we come to the same decision. Let &lt;span class=&#34;math inline&#34;&gt;\(k^{*}\)&lt;/span&gt; be the first &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; such that &lt;span class=&#34;math inline&#34;&gt;\(P(X &amp;gt; k) \leq \alpha\)&lt;/span&gt;. For &lt;span class=&#34;math inline&#34;&gt;\(x_{\mathrm{obs}} &amp;lt; k^{*}\)&lt;/span&gt;, we fail to reject &lt;span class=&#34;math inline&#34;&gt;\(H_{0}\)&lt;/span&gt; and for &lt;span class=&#34;math inline&#34;&gt;\(x_{\mathrm{obs}} &amp;gt; k^{*}\)&lt;/span&gt;, we reject &lt;span class=&#34;math inline&#34;&gt;\(H_{0}\)&lt;/span&gt;. When &lt;span class=&#34;math inline&#34;&gt;\(x_{\mathrm{obs}} = k^{*}\)&lt;/span&gt;, we use the randomization device. We should only reject when the randomized &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value is less than or equal to &lt;span class=&#34;math inline&#34;&gt;\(\alpha\)&lt;/span&gt;, and hence when we fall in the portion of the interpolating line that is less than or equal to &lt;span class=&#34;math inline&#34;&gt;\(\alpha\)&lt;/span&gt;. Rotating the figure above 90º counterclockwise, we have
+&lt;p&gt;
+&lt;img src=&#34;https://raw.githubusercontent.com/ddarmon/master/master/images/randomized-p-value-schematic.png&#34; width=&#34;600&#34;&gt;
+&lt;p&gt;
+&lt;p&gt;and we should only reject when the &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value falls at or below &lt;span class=&#34;math inline&#34;&gt;\(\alpha\)&lt;/span&gt;. Because &lt;span class=&#34;math inline&#34;&gt;\(U\)&lt;/span&gt; is uniform, the probability that this occurs is
+&lt;span class=&#34;math display&#34;&gt;\[P\left(U \leq \frac{\alpha - S(k^{*})}{p(k^{*})} \right) = \frac{\alpha - S(k^{*})}{p(k^{*})}.\]&lt;/span&gt;
+So on the boundary of the rejection region, we reject &lt;span class=&#34;math inline&#34;&gt;\(H_{0}\)&lt;/span&gt; with probability &lt;span class=&#34;math inline&#34;&gt;\(\frac{\alpha - S(k^{*})}{p(k^{*})}\)&lt;/span&gt;. Let &lt;span class=&#34;math inline&#34;&gt;\(\phi(X)\)&lt;/span&gt; be our rejection rule, i.e. the function that is 1 when we reject the null hypothesis and 0 otherwise. Then &lt;span class=&#34;math inline&#34;&gt;\(\phi\)&lt;/span&gt; is a random function with the conditional distribution
+&lt;span class=&#34;math display&#34;&gt;\[P(\phi(X) = 1 \mid X = k) = \begin{cases} 0 &amp;amp;: k &amp;lt; k^{*} \\ \frac{\alpha - S(k^{*})}{p(k^{*})} &amp;amp;: k = k^{*} \\ 1 &amp;amp;: k &amp;gt; k^{*} \end{cases}.\]&lt;/span&gt;
+Given this definition, it’s straightforward to prove that the probability that we reject the null hypothesis, that is, that &lt;span class=&#34;math inline&#34;&gt;\(\phi(X) = 1\)&lt;/span&gt;, is in fact &lt;span class=&#34;math inline&#34;&gt;\(\alpha\)&lt;/span&gt;:
+&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} P(\phi(X) = 1) &amp;amp;= \sum_{k} P(\phi(X) = 1 \mid X = k) P(X = k) \\ &amp;amp;= \sum_{\{k : k &amp;lt; k^{*}\}} 0 \cdot p(k) + \frac{\alpha - S(k^{*})}{p(k^{*})} p(k^{*}) + \sum_{\{k : k &amp;gt; k^{*}\}} 1 \cdot p(k) \\ &amp;amp;= \alpha - S(k^{*}) + S(k^{*}) \\ &amp;amp;= \alpha,\end{aligned}\]&lt;/span&gt;
+just as we wanted.&lt;/p&gt;
+&lt;p&gt;So a little uncertainty at the end buys us back our size, and we attain the desired significance level.&lt;/p&gt;
+</description>
     </item>
     
   </channel>
