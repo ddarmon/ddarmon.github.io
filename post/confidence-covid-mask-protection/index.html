@@ -114,6 +114,7 @@
 Time spent:
 
 061220, 30 min
+061220, 38 min
 
 -->
 <blockquote>
@@ -224,7 +225,7 @@ and we can compute the confidence functions using <code>clp</code>’s <code>ris
 <pre><code>## [1] 0.3261612</code></pre>
 <p>where we use <span class="math inline">\(\rho = 1\)</span> since a risk ratio of 1 indicates no difference in risk between the two groups. This exactly matches the <span class="math inline">\(P\)</span>-value for <span class="math inline">\(\delta = 0\)</span>.</p>
 <p>Finally, all the same analyses, but using the odds ratio
-<span class="math display">\[\begin{aligned} \omega &amp;= \frac{\text{Odds(Infection; Treatment)}}{\text{Odds(Infection; Control)}} \\ &amp;= \frac{p_{T}/(1 - p_{T})}{p_{C}/(1-p_1)}   \end{aligned}\]</span>
+<span class="math display">\[\begin{aligned} \omega &amp;= \frac{\text{Odds(Infection; Treatment)}}{\text{Odds(Infection; Control)}} \\ &amp;= \frac{p_{T}/(1 - p_{T})}{p_{C}/(1-p_{C})}   \end{aligned}\]</span>
 I’ll leave out the color commentary this time:</p>
 <pre class="r"><code>conf.odds.ratio &lt;- clp::oddsratio.conf(x, n)</code></pre>
 <p><img src="/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-18-1.png" width="672" /><img src="/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-18-2.png" width="672" /></p>

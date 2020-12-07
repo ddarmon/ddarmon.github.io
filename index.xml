@@ -22,6 +22,7 @@
 Time spent:
 
 061220, 30 min
+061220, 38 min
 
 --&gt;
 &lt;blockquote&gt;
@@ -132,7 +133,7 @@ and we can compute the confidence functions using &lt;code&gt;clp&lt;/code&gt;â€
 &lt;pre&gt;&lt;code&gt;## [1] 0.3261612&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;where we use &lt;span class=&#34;math inline&#34;&gt;\(\rho = 1\)&lt;/span&gt; since a risk ratio of 1 indicates no difference in risk between the two groups. This exactly matches the &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;-value for &lt;span class=&#34;math inline&#34;&gt;\(\delta = 0\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p&gt;Finally, all the same analyses, but using the odds ratio
-&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} \omega &amp;amp;= \frac{\text{Odds(Infection; Treatment)}}{\text{Odds(Infection; Control)}} \\ &amp;amp;= \frac{p_{T}/(1 - p_{T})}{p_{C}/(1-p_1)}   \end{aligned}\]&lt;/span&gt;
+&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} \omega &amp;amp;= \frac{\text{Odds(Infection; Treatment)}}{\text{Odds(Infection; Control)}} \\ &amp;amp;= \frac{p_{T}/(1 - p_{T})}{p_{C}/(1-p_{C})}   \end{aligned}\]&lt;/span&gt;
 Iâ€™ll leave out the color commentary this time:&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.odds.ratio &amp;lt;- clp::oddsratio.conf(x, n)&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-18-1.png&#34; width=&#34;672&#34; /&gt;&lt;img src=&#34;/post/2020-12-06-confidence-covid-mask-protection_files/figure-html/unnamed-chunk-18-2.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
