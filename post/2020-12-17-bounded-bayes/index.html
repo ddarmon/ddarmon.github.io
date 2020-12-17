@@ -1,0 +1,111 @@
+---
+title: "Bounded Bayes: Markov Chain Monte Carlo (MCMC) for Posteriors of Bounded Parameters"
+author: ''
+date: '2020-12-17'
+slug: bounded-bayes
+categories:
+  - statistics
+  - Bayesian statitics
+tags:
+  - statistics
+  - reminders
+  - worked examples
+draft: no
+---
+
+<link href="index_files/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="index_files/anchor-sections/anchor-sections.js"></script>
+
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<!--
+
+Time spent:
+
+161220, 10 min
+171220
+
+-->
+<p>This is largely a note to my past-self on how to easily use Markov Chain Monte Carlo (MCMC) methods for Bayesian inference when the parameter you are interested in has bounded support. The most basic MCMC methods involve using additive noise to get new draws, which can cause problems if that kicks you out of the parameter space.</p>
+<p>Suggestions abound to use the transformation trick on a bounded parameter <span class="math inline">\(\theta\)</span>, and then make draws of the transformed parameter. But I could not easily find a worked example. So here’s that worked example.</p>
+<p>Suppose we want to simulate from the posterior distribution of a parameter <span class="math inline">\(\theta\)</span> with a bounded parameter space. Select an invertible function <span class="math inline">\(g\)</span> that maps the bounded parameter space to the real line, i.e.
+<span class="math display">\[\psi = g(\theta) \text{ where } g : \Theta \to \mathbb{R}.\]</span>
+Then simulate from the posterior density <span class="math inline">\(f_{\Psi \mid \mathbf{X}}(\psi \mid \mathbf{x})\)</span> in terms of the transformed parameter <span class="math inline">\(\psi\)</span>. By the transformation theorem,
+<span class="math display">\[\psi \mid \mathbf{X} = \mathbf{x} \sim f_{\Psi \mid \mathbf{X}}(\psi \mid \mathbf{x}) = \frac{f_{\Theta \mid \mathbf{X}}(g^{-1}(\psi) \mid \mathbf{x})}{|g&#39;(g^{-1}(\psi))|},\]</span>
+where the posterior <span class="math inline">\(f_{\Theta \mid \mathbf{X}}\)</span> is known, at least up to the likelihood and prior.</p>
+<p>Let’s use this to simulate a success probability for a binomial proportion from the posterior density <span class="math inline">\(f_{P \mid X}(p \mid x)\)</span>. Here, because <span class="math inline">\(p \in (0, 1)\)</span>, it’s natural to use the logit function to map from <span class="math inline">\((0, 1)\)</span> to <span class="math inline">\((-\infty, \infty)\)</span>:
+<span class="math display">\[
+\psi = \operatorname{logit}(p) = \log \frac{p}{1-p}
+\]</span>
+The transformation theorem then gives the posterior in terms of <span class="math inline">\(\psi\)</span> as:
+<span class="math display">\[
+\begin{aligned} 
+  f_{\Psi \mid X}(\psi \mid x) &amp;= \frac{f_{P \mid X}(\operatorname{logit}^{-1}(\psi) \mid x)}{|\operatorname{logit}&#39;(\operatorname{logit}^{-1}(\psi))|}  \\
+  &amp;= f_{P \mid X}(p \mid x) \times p(1-p)
+  \end{aligned}
+\]</span>
+where
+<span class="math display">\[
+p = \operatorname{logit}^{-1}(\psi) = \frac{e^{\psi}}{1 + e^{\psi}}.
+\]</span>
+Sampling <span class="math inline">\(\psi\)</span> via a random walk and using the Metropolis-Hastings update rule now gives a chain in terms of <span class="math inline">\(\psi_{1}, \psi_{2}, \ldots, \psi_{B}\)</span>, which can be transformed via <span class="math inline">\(\operatorname{logit}^{-1}\)</span> into a chain in terms of <span class="math inline">\(p_{1}, p_{2}, \ldots, p_{B}\)</span>.</p>
+<p>Let’s use the Jeffreys prior for <span class="math inline">\(P\)</span>: <span class="math inline">\(P \sim \operatorname{Be}(1/2, 1/2)\)</span>. In this case, we can easily work out the posterior, but let’s use a <a href="http://www.stats.org.uk/priors/noninformative/YangBerger1998.pdf">lookup table</a> put together by Ruoyong Yang and Jim Berger. The posterior distribution of <span class="math inline">\(P\)</span> given we observe <span class="math inline">\(x\)</span> successes in <span class="math inline">\(n\)</span> trials is <span class="math inline">\(P \mid X = x \sim \operatorname{Be}(x + 1/2, n - x + 1/2)\)</span>.</p>
+<p>We know the posterior in terms of <span class="math inline">\(\psi = \operatorname{logit}(p)\)</span> is
+<span class="math display">\[f(\psi \mid x) \propto f(x \mid \psi) f(\psi).\]</span>
+Moreover, the posterior in terms of <span class="math inline">\(p\)</span> is</p>
+<p><span class="math display">\[
+\begin{aligned}  
+    f(p \mid x) &amp;\propto f(x \mid p) f(p) \\
+    &amp;= \texttt{dbinom(x, n, p)*dbeta(p, 1/2, 1/2)} 
+\end{aligned}
+\]</span>
+And the posterior in terms of <span class="math inline">\(\psi\)</span> is just the posterior in terms of <span class="math inline">\(p\)</span>, modified by the multiplicative factor that takes care of the transformation from <span class="math inline">\(p\)</span> to <span class="math inline">\(\psi\)</span>
+<span class="math display">\[
+f(\psi \mid x) \propto f(p \mid x) p (1-p) \bigg\rvert_{p = \operatorname{logit}^{-1}(\psi)}
+\]</span>
+This is the posterior distribution we will make draws from using Metropolis-Hastings, i.e. given that we have <span class="math inline">\(\psi_{1}, \psi_{2}, \ldots, \psi_{t-1}\)</span>, generate a new potential draw <span class="math inline">\(\psi_{t} = \psi_{t-1} + \epsilon_{t}\)</span> where <span class="math inline">\(\epsilon_{t} \sim N(0, \sigma^{2})\)</span>, and compute
+<span class="math display">\[ 
+A = \min \left\{1, \frac{f(\psi_{t} \mid x)}{f(\psi_{t-1} \mid x)} \right\}.
+\]</span>
+We then accept <span class="math inline">\(\psi_{t}\)</span> with probability <span class="math inline">\(A\)</span>, or otherwise repeat the previous draw, i.e. <span class="math inline">\(\psi_{t} = \psi_{t-1}\)</span>.</p>
+<p>Let’s define some functions for the logit and inverse logit functions:</p>
+<pre class="r"><code>logit &lt;- function(p) log(p/(1-p))
+invlogit &lt;- function(psi) exp(psi)/(1 + exp(psi))</code></pre>
+<p>And to compute the numerator of the posterior distribution of <span class="math inline">\(\Psi \mid X = x\)</span>:</p>
+<pre class="r"><code>posterior.numer &lt;- function(psi){
+  p = invlogit(psi)
+  dbinom(x, n, p)*dbeta(p, 1/2, 1/2)*p*(1-p)
+}</code></pre>
+<p>Now we’re ready to simulate from the posterior distribution via Metropolis-Hastings:</p>
+<pre class="r"><code>set.seed(1) # For reproducibility
+
+n &lt;- 2
+x &lt;- 1
+
+B &lt;- 100000
+
+psis &lt;- rep(0, length(B))
+
+for (b in 2:B){
+  candidate.psi &lt;- psis[b-1] + rnorm(1, 0, 1)
+  
+  A &lt;- min(c(1, posterior.numer(candidate.psi)/posterior.numer(psis[b-1])))
+  
+  if (runif(1) &lt;= A){ # Accept candidate.psi with probability A
+    psis[b] &lt;- candidate.psi
+  }else{ # Reject candidate.psi and repeat psis[b-1]
+    psis[b] &lt;- psis[b-1]
+  }
+}</code></pre>
+<p>We can view the Markov chains for the posterior distributions in terms of either the <span class="math inline">\(\psi\)</span>s or the <span class="math inline">\(p\)</span>s:</p>
+<pre class="r"><code>par(mfrow = c(2, 1))
+plot(psis, type = &#39;l&#39;, xlim = c(1, 1000))
+plot(invlogit(psis), type = &#39;l&#39;, xlim = c(1, 1000))</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>And the posterior distributions in terms of either the <span class="math inline">\(\psi\)</span>s or the <span class="math inline">\(p\)</span>s:</p>
+<pre class="r"><code>par(mfrow = c(1, 2))
+hist(psis, breaks = &#39;FD&#39;, main = &#39;&#39;)
+hist(invlogit(psis), breaks = &#39;FD&#39;, freq = FALSE, xlim = c(0, 1), main = &#39;&#39;)
+curve(dbeta(p, x + 0.5, n - x + 0.5), xname = &#39;p&#39;, add = TRUE, col = &#39;blue&#39;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>Clearly, the simulated draws match the true posterior, as they must.</p>
