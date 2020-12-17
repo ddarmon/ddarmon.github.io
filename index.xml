@@ -6,7 +6,113 @@
     <description>Recent content on Practically Insignificant</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 04 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 17 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Bounded Bayes: Markov Chain Monte Carlo (MCMC) for Posteriors of Bounded Parameters</title>
+      <link>/post/bounded-bayes/</link>
+      <pubDate>Thu, 17 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/bounded-bayes/</guid>
+      <description>
+&lt;link href=&#34;/rmarkdown-libs/anchor-sections/anchor-sections.css&#34; rel=&#34;stylesheet&#34; /&gt;
+&lt;script src=&#34;/rmarkdown-libs/anchor-sections/anchor-sections.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;script src=&#39;https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML&#39;&gt;&lt;/script&gt;
+&lt;!--
+
+Time spent:
+
+161220, 10 min
+171220
+
+--&gt;
+&lt;p&gt;This is largely a note to my past-self on how to easily use Markov Chain Monte Carlo (MCMC) methods for Bayesian inference when the parameter you are interested in has bounded support. The most basic MCMC methods involve using additive noise to get new draws, which can cause problems if that kicks you out of the parameter space.&lt;/p&gt;
+&lt;p&gt;Suggestions abound to use the transformation trick on a bounded parameter &lt;span class=&#34;math inline&#34;&gt;\(\theta\)&lt;/span&gt;, and then make draws of the transformed parameter. But I could not easily find a worked example. So here’s that worked example.&lt;/p&gt;
+&lt;p&gt;Suppose we want to simulate from the posterior distribution of a parameter &lt;span class=&#34;math inline&#34;&gt;\(\theta\)&lt;/span&gt; with a bounded parameter space. Select an invertible function &lt;span class=&#34;math inline&#34;&gt;\(g\)&lt;/span&gt; that maps the bounded parameter space to the real line, i.e.
+&lt;span class=&#34;math display&#34;&gt;\[\psi = g(\theta) \text{ where } g : \Theta \to \mathbb{R}.\]&lt;/span&gt;
+Then simulate from the posterior density &lt;span class=&#34;math inline&#34;&gt;\(f_{\Psi \mid \mathbf{X}}(\psi \mid \mathbf{x})\)&lt;/span&gt; in terms of the transformed parameter &lt;span class=&#34;math inline&#34;&gt;\(\psi\)&lt;/span&gt;. By the transformation theorem,
+&lt;span class=&#34;math display&#34;&gt;\[\psi \mid \mathbf{X} = \mathbf{x} \sim f_{\Psi \mid \mathbf{X}}(\psi \mid \mathbf{x}) = \frac{f_{\Theta \mid \mathbf{X}}(g^{-1}(\psi) \mid \mathbf{x})}{|g&amp;#39;(g^{-1}(\psi))|},\]&lt;/span&gt;
+where the posterior &lt;span class=&#34;math inline&#34;&gt;\(f_{\Theta \mid \mathbf{X}}\)&lt;/span&gt; is known, at least up to the likelihood and prior.&lt;/p&gt;
+&lt;p&gt;Let’s use this to simulate a success probability for a binomial proportion from the posterior density &lt;span class=&#34;math inline&#34;&gt;\(f_{P \mid X}(p \mid x)\)&lt;/span&gt;. Here, because &lt;span class=&#34;math inline&#34;&gt;\(p \in (0, 1)\)&lt;/span&gt;, it’s natural to use the logit function to map from &lt;span class=&#34;math inline&#34;&gt;\((0, 1)\)&lt;/span&gt; to &lt;span class=&#34;math inline&#34;&gt;\((-\infty, \infty)\)&lt;/span&gt;:
+&lt;span class=&#34;math display&#34;&gt;\[
+\psi = \operatorname{logit}(p) = \log \frac{p}{1-p}
+\]&lt;/span&gt;
+The transformation theorem then gives the posterior in terms of &lt;span class=&#34;math inline&#34;&gt;\(\psi\)&lt;/span&gt; as:
+&lt;span class=&#34;math display&#34;&gt;\[
+\begin{aligned} 
+  f_{\Psi \mid X}(\psi \mid x) &amp;amp;= \frac{f_{P \mid X}(\operatorname{logit}^{-1}(\psi) \mid x)}{|\operatorname{logit}&amp;#39;(\operatorname{logit}^{-1}(\psi))|}  \\
+  &amp;amp;= f_{P \mid X}(p \mid x) \times p(1-p)
+  \end{aligned}
+\]&lt;/span&gt;
+where
+&lt;span class=&#34;math display&#34;&gt;\[
+p = \operatorname{logit}^{-1}(\psi) = \frac{e^{\psi}}{1 + e^{\psi}}.
+\]&lt;/span&gt;
+Sampling &lt;span class=&#34;math inline&#34;&gt;\(\psi\)&lt;/span&gt; via a random walk and using the Metropolis-Hastings update rule now gives a chain in terms of &lt;span class=&#34;math inline&#34;&gt;\(\psi_{1}, \psi_{2}, \ldots, \psi_{B}\)&lt;/span&gt;, which can be transformed via &lt;span class=&#34;math inline&#34;&gt;\(\operatorname{logit}^{-1}\)&lt;/span&gt; into a chain in terms of &lt;span class=&#34;math inline&#34;&gt;\(p_{1}, p_{2}, \ldots, p_{B}\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;Let’s use the Jeffreys prior for &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt;: &lt;span class=&#34;math inline&#34;&gt;\(P \sim \operatorname{Be}(1/2, 1/2)\)&lt;/span&gt;. In this case, we can easily work out the posterior, but let’s use a &lt;a href=&#34;http://www.stats.org.uk/priors/noninformative/YangBerger1998.pdf&#34;&gt;lookup table&lt;/a&gt; put together by Ruoyong Yang and Jim Berger. The posterior distribution of &lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt; given we observe &lt;span class=&#34;math inline&#34;&gt;\(x\)&lt;/span&gt; successes in &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt; trials is &lt;span class=&#34;math inline&#34;&gt;\(P \mid X = x \sim \operatorname{Be}(x + 1/2, n - x + 1/2)\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;We know the posterior in terms of &lt;span class=&#34;math inline&#34;&gt;\(\psi = \operatorname{logit}(p)\)&lt;/span&gt; is
+&lt;span class=&#34;math display&#34;&gt;\[f(\psi \mid x) \propto f(x \mid \psi) f(\psi).\]&lt;/span&gt;
+Moreover, the posterior in terms of &lt;span class=&#34;math inline&#34;&gt;\(p\)&lt;/span&gt; is&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[
+\begin{aligned}  
+    f(p \mid x) &amp;amp;\propto f(x \mid p) f(p) \\
+    &amp;amp;= \texttt{dbinom(x, n, p)*dbeta(p, 1/2, 1/2)} 
+\end{aligned}
+\]&lt;/span&gt;
+And the posterior in terms of &lt;span class=&#34;math inline&#34;&gt;\(\psi\)&lt;/span&gt; is just the posterior in terms of &lt;span class=&#34;math inline&#34;&gt;\(p\)&lt;/span&gt;, modified by the multiplicative factor that takes care of the transformation from &lt;span class=&#34;math inline&#34;&gt;\(p\)&lt;/span&gt; to &lt;span class=&#34;math inline&#34;&gt;\(\psi\)&lt;/span&gt;
+&lt;span class=&#34;math display&#34;&gt;\[
+f(\psi \mid x) \propto f(p \mid x) p (1-p) \bigg\rvert_{p = \operatorname{logit}^{-1}(\psi)}
+\]&lt;/span&gt;
+This is the posterior distribution we will make draws from using Metropolis-Hastings, i.e. given that we have &lt;span class=&#34;math inline&#34;&gt;\(\psi_{1}, \psi_{2}, \ldots, \psi_{t-1}\)&lt;/span&gt;, generate a new potential draw &lt;span class=&#34;math inline&#34;&gt;\(\psi_{t} = \psi_{t-1} + \epsilon_{t}\)&lt;/span&gt; where &lt;span class=&#34;math inline&#34;&gt;\(\epsilon_{t} \sim N(0, \sigma^{2})\)&lt;/span&gt;, and compute
+&lt;span class=&#34;math display&#34;&gt;\[ 
+A = \min \left\{1, \frac{f(\psi_{t} \mid x)}{f(\psi_{t-1} \mid x)} \right\}.
+\]&lt;/span&gt;
+We then accept &lt;span class=&#34;math inline&#34;&gt;\(\psi_{t}\)&lt;/span&gt; with probability &lt;span class=&#34;math inline&#34;&gt;\(A\)&lt;/span&gt;, or otherwise repeat the previous draw, i.e. &lt;span class=&#34;math inline&#34;&gt;\(\psi_{t} = \psi_{t-1}\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;Let’s define some functions for the logit and inverse logit functions:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;logit &amp;lt;- function(p) log(p/(1-p))
+invlogit &amp;lt;- function(psi) exp(psi)/(1 + exp(psi))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And to compute the numerator of the posterior distribution of &lt;span class=&#34;math inline&#34;&gt;\(\Psi \mid X = x\)&lt;/span&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;posterior.numer &amp;lt;- function(psi){
+  p = invlogit(psi)
+  dbinom(x, n, p)*dbeta(p, 1/2, 1/2)*p*(1-p)
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now we’re ready to simulate from the posterior distribution via Metropolis-Hastings:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;set.seed(1) # For reproducibility
+
+n &amp;lt;- 2
+x &amp;lt;- 1
+
+B &amp;lt;- 100000
+
+psis &amp;lt;- rep(0, length(B))
+
+for (b in 2:B){
+  candidate.psi &amp;lt;- psis[b-1] + rnorm(1, 0, 1)
+  
+  A &amp;lt;- min(c(1, posterior.numer(candidate.psi)/posterior.numer(psis[b-1])))
+  
+  if (runif(1) &amp;lt;= A){ # Accept candidate.psi with probability A
+    psis[b] &amp;lt;- candidate.psi
+  }else{ # Reject candidate.psi and repeat psis[b-1]
+    psis[b] &amp;lt;- psis[b-1]
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can view the Markov chains for the posterior distributions in terms of either the &lt;span class=&#34;math inline&#34;&gt;\(\psi\)&lt;/span&gt;s or the &lt;span class=&#34;math inline&#34;&gt;\(p\)&lt;/span&gt;s:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;par(mfrow = c(2, 1))
+plot(psis, type = &amp;#39;l&amp;#39;, xlim = c(1, 1000))
+plot(invlogit(psis), type = &amp;#39;l&amp;#39;, xlim = c(1, 1000))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-12-17-bounded-bayes_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;And the posterior distributions in terms of either the &lt;span class=&#34;math inline&#34;&gt;\(\psi\)&lt;/span&gt;s or the &lt;span class=&#34;math inline&#34;&gt;\(p\)&lt;/span&gt;s:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;par(mfrow = c(1, 2))
+hist(psis, breaks = &amp;#39;FD&amp;#39;, main = &amp;#39;&amp;#39;)
+hist(invlogit(psis), breaks = &amp;#39;FD&amp;#39;, freq = FALSE, xlim = c(0, 1), main = &amp;#39;&amp;#39;)
+curve(dbeta(p, x + 0.5, n - x + 0.5), xname = &amp;#39;p&amp;#39;, add = TRUE, col = &amp;#39;blue&amp;#39;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2020-12-17-bounded-bayes_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Clearly, the simulated draws match the true posterior, as they must.&lt;/p&gt;
+</description>
+    </item>
+    
     <item>
       <title>How Confident Are We that Masks &#34;Work&#34;? Confidence Functions and the DANMASK-19 Study</title>
       <link>/post/confidence-covid-mask-protection/</link>
@@ -148,90 +254,6 @@ odds.treatment/odds.control&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] 0.541522 1.226716&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;conf.odds.ratio$pcurve(1)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] 0.3269062&lt;/code&gt;&lt;/pre&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Mid P-values</title>
-      <link>/draft/mid-p-values/</link>
-      <pubDate>Mon, 29 Jun 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/draft/mid-p-values/</guid>
-      <description>
-
-
-&lt;script src=&#39;https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML&#39;&gt;&lt;/script&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.jstor.org/stable/2348891#metadata_info_tab_contents&#34;&gt;Mid-&lt;span class=&#34;math inline&#34;&gt;\(P\)&lt;/span&gt; Confidence Intervals: A Brief Review&lt;/a&gt; by Berry and Armitage.&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} H_{0} &amp;amp;: p \leq 1/2\\ H_{1} &amp;amp;: p &amp;gt; 1/2 \end{aligned}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[P\mathrm{-value} = P(X \geq x_{\text{obs}})\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} P\mathrm{-value} &amp;amp;= P(X \geq x_{\text{obs}}) \\ &amp;amp;= 1 - P(X &amp;lt; x_{\text{obs}}) \\ &amp;amp;= 1 - P(X \leq x_{\text{obs}} - 1)\end{aligned}\]&lt;/span&gt;&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;n &amp;lt;- 10
-p0 &amp;lt;- 0.5
-
-xs &amp;lt;- 0:n
-
-Ps &amp;lt;- 1-pbinom(xs-1, n, p0)
-
-data.frame(xs, Ps)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;##    xs           Ps
-## 1   0 1.0000000000
-## 2   1 0.9990234375
-## 3   2 0.9892578125
-## 4   3 0.9453125000
-## 5   4 0.8281250000
-## 6   5 0.6230468750
-## 7   6 0.3769531250
-## 8   7 0.1718750000
-## 9   8 0.0546875000
-## 10  9 0.0107421875
-## 11 10 0.0009765625&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[\begin{aligned} p_{m}(x) &amp;amp;= P(X &amp;gt; x_{\text{obs}}) + \frac{1}{2} P(X = x_{\text{obs}}) \\ &amp;amp;= P(X \geq x_{\text{obs}}) - \frac{1}{2} P(X = x_{\text{obs}}) \end{aligned}\]&lt;/span&gt;&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;n &amp;lt;- 10
-p0 &amp;lt;- 0.5
-
-xs &amp;lt;- 0:n
-
-Ps.mid &amp;lt;- (1 - pbinom(xs-1, n, p0)) - 0.5*dbinom(xs, n, p0)
-
-data.frame(xs, Ps, Ps.mid)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;##    xs           Ps       Ps.mid
-## 1   0 1.0000000000 0.9995117188
-## 2   1 0.9990234375 0.9941406250
-## 3   2 0.9892578125 0.9672851562
-## 4   3 0.9453125000 0.8867187500
-## 5   4 0.8281250000 0.7255859375
-## 6   5 0.6230468750 0.5000000000
-## 7   6 0.3769531250 0.2744140625
-## 8   7 0.1718750000 0.1132812500
-## 9   8 0.0546875000 0.0327148438
-## 10  9 0.0107421875 0.0058593750
-## 11 10 0.0009765625 0.0004882812&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;sum(Ps*dbinom(xs, n, p0))&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] 0.5880985&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;sum(Ps.mid*dbinom(xs, n, p0))&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] 0.5&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;t1er.mid.p &amp;lt;- function(alpha){
-  sum(dbinom(xs, n, p0)[Ps.mid &amp;lt;= alpha])
-}
-
-t1er.mid.p &amp;lt;- Vectorize(t1er.mid.p)
-
-t1er.exact.p &amp;lt;- function(alpha){
-  sum(dbinom(xs, n, p0)[Ps &amp;lt;= alpha])
-}
-
-t1er.exact.p &amp;lt;- Vectorize(t1er.exact.p)
-
-curve(t1er.mid.p, from = 0, to = 1, n = 2001,
-      xlab = &amp;#39;Nominal Significance Level&amp;#39;, ylab = &amp;#39;Type I Error Rate&amp;#39;, col = &amp;#39;red&amp;#39;)
-curve(t1er.exact.p, col = &amp;#39;blue&amp;#39;, n = 2001, add = TRUE, lty = 2)
-curve(punif, add = TRUE, lty = 3)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/2020-06-29-mid-p-values_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;curve(t1er.mid.p(x) - x, from = 0, to = 0.1, n = 2001,
-      xlab = &amp;#39;Nominal Significance Level&amp;#39;, ylab = &amp;#39;T1ER - Nominal Rate&amp;#39;, col = &amp;#39;red&amp;#39;)
-curve(t1er.exact.p(x) - x, col = &amp;#39;blue&amp;#39;, n = 2001, add = TRUE, lty = 2)
-abline(h = 0, lty = 3)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/post/2020-06-29-mid-p-values_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 </description>
     </item>
     
