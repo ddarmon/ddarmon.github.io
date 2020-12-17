@@ -24,7 +24,7 @@
 Time spent:
 
 161220, 10 min
-171220
+171220, 40 min
 
 --&gt;
 &lt;p&gt;This is largely a note to my past-self on how to easily use Markov Chain Monte Carlo (MCMC) methods for Bayesian inference when the parameter you are interested in has bounded support. The most basic MCMC methods involve using additive noise to get new draws, which can cause problems if that kicks you out of the parameter space.&lt;/p&gt;
