@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Practically Insignificant  | Inference via Stan for the Mean and Variance of a Gaussian (&#34;Normal&#34;) Population with Weakly Informative and Fiducial Priors</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.79.0" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="/dist/css/app.d98f2eb6bcd1eaedb7edf166bd16af26.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+    
+    <meta property="og:title" content="Inference via Stan for the Mean and Variance of a Gaussian (&#34;Normal&#34;) Population with Weakly Informative and Fiducial Priors" />
+<meta property="og:description" content="Preamble  Attenion Conservation Notice: I implement the now-standard Bayesian procedure for estimating a Gaussian mean and variance with weakly informative priors using Stan and make some connections to confidence distributions and fiducial inference. But without any of the details for this to make sense for a newcomer. For the former material, you are better served by page 73 of A First Course in Bayesian Statistical Methods by Peter Hoff or page 67 of Bayesian Data Analysis." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/weakly-informative-and-fiducial-priors-for-gaussian-mean-and-variance/" />
+<meta property="article:published_time" content="2021-09-13T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-09-13T00:00:00+00:00" />
+<meta itemprop="name" content="Inference via Stan for the Mean and Variance of a Gaussian (&#34;Normal&#34;) Population with Weakly Informative and Fiducial Priors">
+<meta itemprop="description" content="Preamble  Attenion Conservation Notice: I implement the now-standard Bayesian procedure for estimating a Gaussian mean and variance with weakly informative priors using Stan and make some connections to confidence distributions and fiducial inference. But without any of the details for this to make sense for a newcomer. For the former material, you are better served by page 73 of A First Course in Bayesian Statistical Methods by Peter Hoff or page 67 of Bayesian Data Analysis.">
+<meta itemprop="datePublished" content="2021-09-13T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-09-13T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1768">
+
+
+
+<meta itemprop="keywords" content="statistics,reminders,worked examples," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Inference via Stan for the Mean and Variance of a Gaussian (&#34;Normal&#34;) Population with Weakly Informative and Fiducial Priors"/>
+<meta name="twitter:description" content="Preamble  Attenion Conservation Notice: I implement the now-standard Bayesian procedure for estimating a Gaussian mean and variance with weakly informative priors using Stan and make some connections to confidence distributions and fiducial inference. But without any of the details for this to make sense for a newcomer. For the former material, you are better served by page 73 of A First Course in Bayesian Statistical Methods by Peter Hoff or page 67 of Bayesian Data Analysis."/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Practically Insignificant
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+      
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+
+    <header class="mt4 w-100">
+      <p class="f6 b helvetica tracked">
+          
+        POSTS
+      </p>
+      <h1 class="f1 athelas mb1">Inference via Stan for the Mean and Variance of a Gaussian (&#34;Normal&#34;) Population with Weakly Informative and Fiducial Priors</h1>
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2021-09-13T00:00:00Z">September 13, 2021</time>
+      
+      
+    </header>
+
+    <section class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l">
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<!--
+
+Time spent:
+
+130921, 95 min
+
+-->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<div id="preamble" class="section level2">
+<h2>Preamble</h2>
+<blockquote>
+<p><em>Attenion Conservation Notice:</em> I implement the now-standard Bayesian procedure for estimating a Gaussian mean and variance with weakly informative priors using Stan and make some connections to confidence distributions and fiducial inference. But without any of the details for this to make sense for a newcomer. For the former material, you are better served by page 73 of <a href="https://pdhoff.github.io/book/"><em>A First Course in Bayesian Statistical Methods</em></a> by Peter Hoff or page 67 of <a href="http://www.stat.columbia.edu/~gelman/book/"><em>Bayesian Data Analysis</em></a>. For the latter material, by <a href="https://www.cambridge.org/core/books/confidence-likelihood-probability/"><em>Confidence, Likelihood, Probability</em></a> by Tore Schweder and Nils Lid Hjort.</p>
+</blockquote>
+<p>Consider simultaneously estimating the population mean and population variance of a Gaussian (“Normal”) population <span class="math inline">\(N(\mu, \sigma^{2})\)</span> where both the mean and variance are unknown. This is the textbook case of statistical inference, which in the Frequentist case is solved by using the sample mean and sample variance of a random sample <span class="math inline">\(X_{1}, X_{2}, \ldots, X_{n}\)</span>.</p>
+<p>But let’s solve it using a Bayesian procedure with a weakly informative prior for the population mean and population variance. We’ll focus on the precision <span class="math inline">\(1 / \sigma^{2}\)</span> rather than the variance <span class="math inline">\(\sigma^{2}\)</span> since the precision’s conjugate prior is a Gamma distribution, and it allows us to demonstrate some features of Stan. We will assume the prior factors as <span class="math inline">\(p(\mu, 1/\sigma^{2}) = p(1 / \sigma^{2}) p(\mu \mid 1/\sigma^{2})\)</span>, and take the following marginal and conditional distributions<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>:
+<span class="math display">\[
+\begin{aligned}  
+    1/\sigma^{2} &amp;\sim \text{Gamma}(\nu_{0}/2, \sigma_{0}^{2} \nu_{0}/2) \\
+    \mu \mid \sigma^{2} &amp; \sim N(\mu_{0}, \sigma^{2}/ \kappa_{0}).
+\end{aligned}
+\]</span>
+That is, the precision follows a Gamma distribution parametrized by <span class="math inline">\(\nu_{0}\)</span> – which can be thought of as the sample size for the prior estimate of the variance <span class="math inline">\(\sigma_{0}^{2}\)</span> – and the conditional distribution of the mean follows a Gaussian distribution parametrized by <span class="math inline">\(\kappa_{0}\)</span> – which can be thought of as the sample size for the prior estimate <span class="math inline">\(\mu_{0}\)</span> of the mean.</p>
+</div>
+<div id="stan-implementation" class="section level2">
+<h2>Stan Implementation</h2>
+<p>One can write down the posterior distribution <span class="math inline">\(p(\mu, 1 / \sigma^{2} \mid x_{1}^{n})\)</span> given a sample <span class="math inline">\(x_{1}^{n}\)</span> from a Gaussian population, but let’s be lazy and use <a href="https://mc-stan.org">Stan</a> to do all of the heavy lifting, and then check our answer using the theoretical result.</p>
+<pre><code>data {
+  int N; // the sample size
+  vector[N] x; // the data
+  real mu0; // mean for prior on mu
+  real kappa0; // sample size for prior on mu
+  real sigma0; // prior value for sigma
+  real nu0; // sample size for prior on sigma^2
+}
+
+parameters {
+  real mu; // the mean
+  real&lt;lower=0&gt; prec; // the precision, 1 / variance
+}
+
+transformed parameters{
+  real&lt;lower=0&gt; sigma;
+  
+  sigma = 1/sqrt(prec);
+}
+
+model {
+  prec ~ gamma(nu0/2, nu0/2*square(sigma0)); // prior for the precision
+  mu ~ normal(mu0, sigma/sqrt(kappa0)); // conditional prior for the mean
+  
+  x ~ normal(mu, sigma); // likelihood for the data
+}</code></pre>
+<p>As with any Stan model, we set up the data in the first block, the parameters in the second, and the model in the final block. We include a transformation of the precision back to the standard deviation for ease later. We could have also done this all in terms of the variance by using the inverse-Gamma distribution, but this way we get to practice making the transformation.</p>
+</div>
+<div id="mcmc-goes-brr" class="section level2">
+<h2>MCMC Goes Brr</h2>
+<p>We run the model with <a href="https://mc-stan.org/cmdstanr/"><code>cmdstanr</code></a>.</p>
+<pre class="r"><code>library(cmdstanr)
+options(mc.cores = 4)</code></pre>
+<pre class="r"><code>set.seed(314)
+
+N &lt;- 3
+
+x &lt;- rnorm(N, mean = 0, sd = 1)
+
+mu0  &lt;- 0 # prior mean for mu
+kappa0 &lt;- 1 # prior sample size for mu
+
+sigma0 &lt;- 1 # prior mean for sigma
+nu0 &lt;- 1 # prior sample size for sigma
+
+data.for.stan &lt;- list(N = N, 
+                      x = x,
+                      mu0 = mu0,
+                      kappa0 = kappa0, 
+                      sigma0 = sigma0,
+                      nu0 = nu0
+                      )</code></pre>
+<pre class="r"><code>mod &lt;- cmdstanr::cmdstan_model(&#39;gaussian-model-with-conditional-prior.stan&#39;)
+
+num.samples &lt;- 50000 # Number of HMC samples to draw per-core, so total samples is 4*50000
+
+fit &lt;- mod$sample(data.for.stan, chains = 4, iter_sampling = num.samples,
+                  refresh = num.samples/2)</code></pre>
+<pre><code>## Running MCMC with 4 parallel chains...
+## 
+## Chain 1 Iteration:     1 / 51000 [  0%]  (Warmup) 
+## Chain 1 Iteration:  1001 / 51000 [  1%]  (Sampling) 
+## Chain 2 Iteration:     1 / 51000 [  0%]  (Warmup) 
+## Chain 2 Iteration:  1001 / 51000 [  1%]  (Sampling) 
+## Chain 3 Iteration:     1 / 51000 [  0%]  (Warmup) 
+## Chain 3 Iteration:  1001 / 51000 [  1%]  (Sampling) 
+## Chain 4 Iteration:     1 / 51000 [  0%]  (Warmup) 
+## Chain 4 Iteration:  1001 / 51000 [  1%]  (Sampling) 
+## Chain 4 Iteration: 26000 / 51000 [ 50%]  (Sampling) 
+## Chain 1 Iteration: 26000 / 51000 [ 50%]  (Sampling) 
+## Chain 2 Iteration: 26000 / 51000 [ 50%]  (Sampling) 
+## Chain 3 Iteration: 26000 / 51000 [ 50%]  (Sampling) 
+## Chain 4 Iteration: 51000 / 51000 [100%]  (Sampling) 
+## Chain 4 finished in 2.2 seconds.
+## Chain 1 Iteration: 51000 / 51000 [100%]  (Sampling) 
+## Chain 1 finished in 2.5 seconds.
+## Chain 2 Iteration: 51000 / 51000 [100%]  (Sampling) 
+## Chain 3 Iteration: 51000 / 51000 [100%]  (Sampling) 
+## Chain 2 finished in 2.6 seconds.
+## Chain 3 finished in 2.6 seconds.
+## 
+## All 4 chains finished successfully.
+## Mean chain execution time: 2.5 seconds.
+## Total execution time: 2.8 seconds.</code></pre>
+<pre class="r"><code>sim &lt;- fit$draws(format = &#39;df&#39;)</code></pre>
+</div>
+<div id="posterior-parameters" class="section level2">
+<h2>Posterior Parameters</h2>
+<p>Because the prior we chose is conjugate to the Gaussian model, the posterior distributions for the mean and precision are also Normal and Gamma, namely,
+<span class="math display">\[
+\begin{aligned}  
+  1 / 1 / \sigma^{2} \mid X_{1}^{n} &amp;\sim \mathrm{Gamma}(\nu_{n}/2, \sigma_{n}^{2} \nu_{n}/2)\\
+    \mu \mid X_{1}^{n}, 1/\sigma^{2} &amp;\sim  N(\mu_{n}, \sigma^{2} / \kappa_{n})
+\end{aligned}
+\]</span>
+where the updated parameters are given by
+<span class="math display">\[
+\begin{aligned}  
+    \mu_{n} &amp;= \frac{\kappa_{0} \mu_{0} + n \bar{x}}{\kappa_{0} + n} \\
+    \kappa_{n} &amp;= \kappa_{0} + n \\
+    \sigma_{n}^{2} &amp;= \frac{\nu_{0} \sigma_{0}^{2} + (n - 1)s^{2} + \frac{\kappa_{0}n}{\kappa_{0} + n} (\bar{x} - \mu_{0})^{2} }{\nu_{0} + n} \\
+    \nu_{n} &amp;= \nu_{0} + n
+\end{aligned}
+\]</span>
+Computing these:</p>
+<pre class="r"><code>kappaN &lt;- kappa0 + N
+
+nuN &lt;- nu0 + N
+
+muN &lt;- kappa0*mu0/(kappa0 + N)  + N*mean(x)/(kappa0 + N)
+
+sigmaN2 &lt;- (nu0*sigma0^2 + (N - 1)*var(x) + kappa0*N / (kappa0 + N) * (mean(x) - mu0)^2)/nuN</code></pre>
+</div>
+<div id="comparison-of-simulated-posterior-distributions-to-exact-posterior-distributions" class="section level2">
+<h2>Comparison of Simulated Posterior Distributions to Exact Posterior Distributions</h2>
+<p>Comparing the exact posterior mean to the MCMC posterior mean,</p>
+<pre class="r"><code>muN</code></pre>
+<pre><code>## [1] -0.3484249</code></pre>
+<pre class="r"><code>mean(sim$mu)</code></pre>
+<pre><code>## [1] -0.3428252</code></pre>
+<p>we get pretty good agreement, as expected.</p>
+<p>Because we know that the posterior distribution of the precision follows a Gamma distribution, we can fit the Gamma distribution via MLE to the posterior draws from MCMC and check that that parameters match:</p>
+<pre class="r"><code>gamma.fit &lt;- MASS::fitdistr(sim$prec, &#39;gamma&#39;)
+
+hist(sim$prec, breaks = &#39;FD&#39;, freq = FALSE)
+
+curve(dgamma(x, gamma.fit$estimate[&#39;shape&#39;], gamma.fit$estimate[&#39;rate&#39;]), col = &#39;cyan&#39;, add = TRUE)</code></pre>
+<p><img src="/post/2021-09-13-weakly-informative-and-fiducial-priors-for-gaussian-mean-and-variance_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+The fit is clearly very good, and the MLEs match the shape and rate:</p>
+<pre class="r"><code>gamma.fit</code></pre>
+<pre><code>##       shape         rate    
+##   1.989571182   1.691151138 
+##  (0.005840961) (0.005642451)</code></pre>
+<pre class="r"><code>nuN/2</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code>nuN/2*sigmaN2</code></pre>
+<pre><code>## [1] 1.698458</code></pre>
+<p>The marginal, rather than conditional, posterior distribution of the mean follows a <a href="https://en.wikipedia.org/wiki/Student%27s_t-distribution#Generalized_Student&#39;s_t-distribution">generalized <span class="math inline">\(t\)</span>-distribution</a> such that
+<span class="math display">\[
+\frac{\mu - \mu_{n}}{\sigma_{n}/\sqrt{\kappa_{n}}} \sim t(\nu_{n})
+\]</span></p>
+<pre class="r"><code>tstat.bayesian &lt;- (sim$mu - muN)/sqrt(sigmaN2 / kappaN)
+
+t.fit.bayesian &lt;- MASS::fitdistr(tstat.bayesian, &#39;t&#39;)</code></pre>
+<pre class="r"><code>hist(tstat.bayesian, breaks = &#39;FD&#39;, freq = FALSE)
+
+curve(dt(x, t.fit.bayesian$estimate[3]), add = TRUE, col = &#39;cyan&#39;, n = 2001)</code></pre>
+<p><img src="/post/2021-09-13-weakly-informative-and-fiducial-priors-for-gaussian-mean-and-variance_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<pre class="r"><code>t.fit.bayesian</code></pre>
+<pre><code>##         m             s            df     
+##   0.007324081   0.992963810   3.930473256 
+##  (0.002632432) (0.002780822) (0.035911221)</code></pre>
+<pre class="r"><code>nuN</code></pre>
+<pre><code>## [1] 4</code></pre>
+<p>Alternatively, fitting the posterior distribution for <span class="math inline">\(\mu\)</span> directly</p>
+<pre class="r"><code>t.fit &lt;- MASS::fitdistr(sim$mu, &#39;t&#39;)</code></pre>
+<pre class="r"><code>t.fit</code></pre>
+<pre><code>##         m              s              df     
+##   -0.345050194    0.457526420    3.930502369 
+##  ( 0.001212941) ( 0.001281305) ( 0.035911829)</code></pre>
+<pre class="r"><code>muN</code></pre>
+<pre><code>## [1] -0.3484249</code></pre>
+<pre class="r"><code>sqrt(sigmaN2/kappaN)</code></pre>
+<pre><code>## [1] 0.4607681</code></pre>
+<pre class="r"><code>nuN</code></pre>
+<pre><code>## [1] 4</code></pre>
+<p>we see that we recover the correct parameters from the MCMC samples.</p>
+</div>
+<div id="fiducial-distribution" class="section level2">
+<h2>Fiducial Distribution</h2>
+<p>Ronald Fisher determined that the <a href="https://en.wikipedia.org/wiki/Fiducial_inference">fiducial distribution</a> for <span class="math inline">\(\mu\)</span> in the Gaussian model with unknown mean and variance <strong>also</strong> follows a generalized <span class="math inline">\(t\)</span>-distribution.</p>
+<p>One might hope that we could mimic the fiducial distribution in Stan by taking an approximately noninformative prior on <span class="math inline">\(\mu\)</span> and <span class="math inline">\(1 / \sigma^{2}\)</span> by setting <span class="math inline">\(\kappa_{n}\)</span> and <span class="math inline">\(\nu_{n}\)</span> (the “sample sizes” for the priors) to small positive values. This, however, does not work, and the “appropriate,” in the sense that it recovers the fiducial distribution, approach is to take
+<span class="math display">\[
+\begin{aligned}  
+    p(\mu) &amp;= 1 \\
+    p(\sigma^{2}) &amp;= 1/\sigma^{2}.
+\end{aligned}
+\]</span></p>
+<pre class="r"><code>data.for.stan &lt;- list(N = N, 
+                      x = x)</code></pre>
+<pre class="r"><code>mod.fiducial &lt;- cmdstanr::cmdstan_model(&#39;gaussian-model-with-fiducial-prior.stan&#39;)
+
+fit.fiducial &lt;- mod.fiducial$sample(data.for.stan, chains = 4, iter_sampling = num.samples,
+                  refresh = num.samples/2)</code></pre>
+<pre><code>## Running MCMC with 4 parallel chains...
+## 
+## Chain 1 Iteration:     1 / 51000 [  0%]  (Warmup) 
+## Chain 1 Iteration:  1001 / 51000 [  1%]  (Sampling) 
+## Chain 2 Iteration:     1 / 51000 [  0%]  (Warmup) 
+## Chain 2 Iteration:  1001 / 51000 [  1%]  (Sampling) 
+## Chain 3 Iteration:     1 / 51000 [  0%]  (Warmup) 
+## Chain 3 Iteration:  1001 / 51000 [  1%]  (Sampling) 
+## Chain 4 Iteration:     1 / 51000 [  0%]  (Warmup) 
+## Chain 4 Iteration:  1001 / 51000 [  1%]  (Sampling) 
+## Chain 1 Iteration: 26000 / 51000 [ 50%]  (Sampling) 
+## Chain 2 Iteration: 26000 / 51000 [ 50%]  (Sampling) 
+## Chain 3 Iteration: 26000 / 51000 [ 50%]  (Sampling) 
+## Chain 4 Iteration: 26000 / 51000 [ 50%]  (Sampling) 
+## Chain 1 Iteration: 51000 / 51000 [100%]  (Sampling) 
+## Chain 3 Iteration: 51000 / 51000 [100%]  (Sampling) 
+## Chain 4 Iteration: 51000 / 51000 [100%]  (Sampling) 
+## Chain 1 finished in 2.0 seconds.
+## Chain 2 Iteration: 51000 / 51000 [100%]  (Sampling) 
+## Chain 2 finished in 2.0 seconds.
+## Chain 3 finished in 2.0 seconds.
+## Chain 4 finished in 2.0 seconds.
+## 
+## All 4 chains finished successfully.
+## Mean chain execution time: 2.0 seconds.
+## Total execution time: 2.1 seconds.</code></pre>
+<pre><code>## 
+## Warning: 1 of 200000 (0.0%) transitions ended with a divergence.
+## This may indicate insufficient exploration of the posterior distribution.
+## Possible remedies include: 
+##   * Increasing adapt_delta closer to 1 (default is 0.8) 
+##   * Reparameterizing the model (e.g. using a non-centered parameterization)
+##   * Using informative or weakly informative prior distributions</code></pre>
+<pre class="r"><code>sim.fiducial &lt;- fit.fiducial$draws(format = &#39;df&#39;)</code></pre>
+<pre class="r"><code>library(clp)
+
+fd.mu &lt;- clp::t_test.conf(x, plot = FALSE)</code></pre>
+<pre class="r"><code>hist(sim.fiducial$mu, breaks = &#39;FD&#39;, freq = FALSE, xlim = c(-10, 10))
+curve(fd.mu$dconf(x), add = TRUE, col = &#39;cyan&#39;, n = 2001)</code></pre>
+<p><img src="/post/2021-09-13-weakly-informative-and-fiducial-priors-for-gaussian-mean-and-variance_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>Alternatively, check that <span class="math inline">\(\mu\)</span> follows a generalized <span class="math inline">\(t\)</span>-distribution such that
+<span class="math display">\[
+\frac{\mu - \bar{x}}{s/\sqrt{n}} \sim t(n - 1).
+\]</span></p>
+<pre class="r"><code>t.fit.fiducial &lt;- MASS::fitdistr(sim.fiducial$mu, &#39;t&#39;)</code></pre>
+<pre class="r"><code>t.fit.fiducial</code></pre>
+<pre><code>##         m              s              df     
+##   -0.462685582    0.613261035    2.068628261 
+##  ( 0.001760619) ( 0.001922725) ( 0.012088245)</code></pre>
+<pre class="r"><code>mean(x)</code></pre>
+<pre><code>## [1] -0.4645666</code></pre>
+<pre class="r"><code>sd(x)/sqrt(N)</code></pre>
+<pre><code>## [1] 0.6103344</code></pre>
+<pre class="r"><code>N - 1 </code></pre>
+<pre><code>## [1] 2</code></pre>
+<p>Again, we see that the posterior distribution matches the generalized <span class="math inline">\(t\)</span>.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>The fact that we should specify the prior mean <strong>conditional</strong> on the prior precision is an important point, the overlooking of which lead me to a good 3+ hours of scratching my head as to why my Stan implementation wasn’t working. The lesson: even with one of the simplest possible statistical models, it pays to be careful.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+<ul class="pa0">
+  
+   <li class="list">
+     <a href="/tags/statistics" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">statistics</a>
+   </li>
+  
+   <li class="list">
+     <a href="/tags/reminders" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">reminders</a>
+   </li>
+  
+   <li class="list">
+     <a href="/tags/worked-examples" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">worked examples</a>
+   </li>
+  
+</ul>
+<div class="mt6">
+      
+      
+      </div>
+    </section>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="/post/bounded-bayes/">Bounded Bayes: Markov Chain Monte Carlo (MCMC) for Posteriors of Bounded Parameters</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="/post/confidence-covid-mask-protection/">How Confident Are We that Masks &#34;Work&#34;? Confidence Functions and the DANMASK-19 Study</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="/post/the-land-of-lost-significance-exact-tests-with-discrete-test-statistics/">Quantum Statistics: Exact Tests with Discrete Test Statistics</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="/post/salvaging-lost-significance-via-randomization-randomized-p-values-for-discrete-test-statistics/">Salvaging Lost Significance via Randomization: Randomized \(P\)-values for Discrete Test Statistics</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="/" >
+    &copy; 2021 Practically Insignificant
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>
