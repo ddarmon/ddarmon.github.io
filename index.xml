@@ -6,7 +6,115 @@
     <description>Recent content on Practically Insignificant</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 13 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 02 Dec 2023 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to Burn Money and Computing Power for a Simple Median</title>
+      <link>/post/2023-12-02-how-to-burn-money-and-computing-power-for-a-simple-median/</link>
+      <pubDate>Sat, 02 Dec 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2023-12-02-how-to-burn-money-and-computing-power-for-a-simple-median/</guid>
+      <description>
+
+
+&lt;p&gt;Today, we dive into the comedic world of absurdly over-engineered solutions for simple problems. Our target? Calculating a mean or median using R and TensorFlow in what might be the most hilariously unnecessary method ever conceived.&lt;/p&gt;
+&lt;div id=&#34;overkill-environment-setup&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Overkill Environment Setup&lt;/h3&gt;
+&lt;p&gt;First things first: setting up our R environment. Sure, we could go easy with &lt;code&gt;dplyr&lt;/code&gt; and &lt;code&gt;ggplot2&lt;/code&gt;, but where’s the fun in that? Instead, let’s summon the computational titans - &lt;code&gt;keras&lt;/code&gt; and &lt;code&gt;tensorflow&lt;/code&gt;. Because obviously, when you think of finding a median, you think of deep learning, right?&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(dplyr)
+library(ggplot2)
+library(keras)
+library(tensorflow)
+reticulate::use_virtualenv(&amp;quot;r-tensorflow&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;creating-a-monster-dataset&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Creating a Monster Dataset&lt;/h3&gt;
+&lt;p&gt;We’re cooking up a dataset &lt;code&gt;y&lt;/code&gt; with 10,000 log-normally distributed random numbers. Normally, a simple task, but not today, folks. Today, we go big.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;n &amp;lt;- 10000
+y &amp;lt;- rlnorm(n)
+x &amp;lt;- as.matrix(rep(1, n))&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;frankensteins-neural-network&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Frankenstein’s Neural Network&lt;/h3&gt;
+&lt;p&gt;Now for the pièce de résistance: a neural network model using Keras, which is like using a sledgehammer to crack a nut:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;u_per_h &amp;lt;- 5
+H &amp;lt;- 10
+activation &amp;lt;- &amp;quot;tanh&amp;quot;
+
+model &amp;lt;- keras_model_sequential(input_shape = c(1L))
+
+for (h in seq_len(H)) {
+  model %&amp;gt;%
+    layer_dense(units = u_per_h, activation = activation)
+}
+
+model %&amp;gt;%
+  layer_dense(units = 1, activation = NULL)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;model&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Model: &amp;quot;sequential&amp;quot;
+## ________________________________________________________________________________
+##  Layer (type)                       Output Shape                    Param #     
+## ================================================================================
+##  dense (Dense)                      (None, 5)                       10          
+##  dense_1 (Dense)                    (None, 5)                       30          
+##  dense_2 (Dense)                    (None, 5)                       30          
+##  dense_3 (Dense)                    (None, 5)                       30          
+##  dense_4 (Dense)                    (None, 5)                       30          
+##  dense_5 (Dense)                    (None, 5)                       30          
+##  dense_6 (Dense)                    (None, 5)                       30          
+##  dense_7 (Dense)                    (None, 5)                       30          
+##  dense_8 (Dense)                    (None, 5)                       30          
+##  dense_9 (Dense)                    (None, 5)                       30          
+##  dense_10 (Dense)                   (None, 1)                       6           
+## ================================================================================
+## Total params: 286 (1.12 KB)
+## Trainable params: 286 (1.12 KB)
+## Non-trainable params: 0 (0.00 Byte)
+## ________________________________________________________________________________&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;286 parameters to memorize 1 number!&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;training-because-we-can&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Training: Because We Can&lt;/h3&gt;
+&lt;p&gt;Let’s train this beast. Our loss function? Mean Absolute Error (MAE). Our optimizer? Stochastic Gradient Descent, because why make it easy?&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;loss &amp;lt;- &amp;quot;mae&amp;quot;
+
+model %&amp;gt;%
+  compile(
+    loss = loss,
+    optimizer = optimizer_sgd(learning_rate = 0.03)
+  )&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Training involves a batch size equal to the length of &lt;code&gt;x&lt;/code&gt;, 200 epochs, a 20% validation split, and early stopping to pretend we care about efficiency.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;history &amp;lt;- model %&amp;gt;%
+  fit(
+    x, y,
+    batch_size = nrow(x),
+    epochs = 200,
+    validation_split = 0.2,
+    callbacks = callback_early_stopping(patience = 10, restore_best_weights = TRUE)
+  )&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;plot(history, smooth = FALSE) +
+  theme_bw() +
+  theme(text = element_text(size = 20))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2023-12-02-how-to-burn-money-and-computing-power-for-a-simple-median/index_files/figure-html/unnamed-chunk-9-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;the-grand-reveal&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;The Grand Reveal&lt;/h3&gt;
+&lt;p&gt;At last, let’s compare the good old-fashioned mean and median with our neural network’s predictions:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;loss&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;mae&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;mean(y)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 1.653302&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;median(y)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 1.002966&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;model(x) %&amp;gt;% head(1)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## tf.Tensor([[0.99974304]], shape=(1, 1), dtype=float32)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;conclusion&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Conclusion&lt;/h3&gt;
+&lt;p&gt;Our journey through the world of computational overkill serves as a hilarious, yet poignant, reminder: sometimes, the simplest tools are the best. This laughably complex method for computing a mean or median underscores the value of choosing the right tool for the task at hand in data analysis. Remember, folks, sometimes less is more!&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
     <item>
       <title>Inference via Stan for the Mean and Variance of a Gaussian (&#34;Normal&#34;) Population with Weakly Informative and Fiducial Priors</title>
       <link>/post/weakly-informative-and-fiducial-priors-for-gaussian-mean-and-variance/</link>

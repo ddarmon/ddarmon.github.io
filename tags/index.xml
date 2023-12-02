@@ -6,42 +6,49 @@
     <description>Recent content in Tags on Practically Insignificant</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 13 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 02 Dec 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>humorous</title>
+      <link>/tags/humorous/</link>
+      <pubDate>Sat, 02 Dec 2023 00:00:00 +0000</pubDate>
+      <guid>/tags/humorous/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>R</title>
+      <link>/tags/r/</link>
+      <pubDate>Sat, 02 Dec 2023 00:00:00 +0000</pubDate>
+      <guid>/tags/r/</guid>
+      <description></description>
+    </item>
     <item>
       <title>reminders</title>
       <link>/tags/reminders/</link>
       <pubDate>Mon, 13 Sep 2021 00:00:00 +0000</pubDate>
-      
       <guid>/tags/reminders/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>statistics</title>
       <link>/tags/statistics/</link>
       <pubDate>Mon, 13 Sep 2021 00:00:00 +0000</pubDate>
-      
       <guid>/tags/statistics/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>worked examples</title>
       <link>/tags/worked-examples/</link>
       <pubDate>Mon, 13 Sep 2021 00:00:00 +0000</pubDate>
-      
       <guid>/tags/worked-examples/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>confidence functions</title>
       <link>/tags/confidence-functions/</link>
       <pubDate>Fri, 04 Dec 2020 00:00:00 +0000</pubDate>
-      
       <guid>/tags/confidence-functions/</guid>
       <description></description>
     </item>
-    
   </channel>
 </rss>

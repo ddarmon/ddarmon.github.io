@@ -6,25 +6,22 @@
     <description>Recent content in worked examples on Practically Insignificant</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 13 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/worked-examples/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 13 Sep 2021 00:00:00 +0000</lastBuildDate>
+    <atom:link href="/tags/worked-examples/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Inference via Stan for the Mean and Variance of a Gaussian (&#34;Normal&#34;) Population with Weakly Informative and Fiducial Priors</title>
       <link>/post/weakly-informative-and-fiducial-priors-for-gaussian-mean-and-variance/</link>
       <pubDate>Mon, 13 Sep 2021 00:00:00 +0000</pubDate>
-      
       <guid>/post/weakly-informative-and-fiducial-priors-for-gaussian-mean-and-variance/</guid>
-      <description>Preamble  Attenion Conservation Notice: I implement the now-standard Bayesian procedure for estimating a Gaussian mean and variance with weakly informative priors using Stan and make some connections to confidence distributions and fiducial inference. But without any of the details for this to make sense for a newcomer. For the former material, you are better served by page 73 of A First Course in Bayesian Statistical Methods by Peter Hoff or page 67 of Bayesian Data Analysis.</description>
+      <description>Preamble Attenion Conservation Notice: I implement the now-standard Bayesian procedure for estimating a Gaussian mean and variance with weakly informative priors using Stan and make some connections to confidence distributions and fiducial inference. But without any of the details for this to make sense for a newcomer. For the former material, you are better served by page 73 of A First Course in Bayesian Statistical Methods by Peter Hoff or page 67 of Bayesian Data Analysis.</description>
     </item>
-    
     <item>
       <title>Bounded Bayes: Markov Chain Monte Carlo (MCMC) for Posteriors of Bounded Parameters</title>
       <link>/post/bounded-bayes/</link>
       <pubDate>Thu, 17 Dec 2020 00:00:00 +0000</pubDate>
-      
       <guid>/post/bounded-bayes/</guid>
       <description>This is largely a note to my past-self on how to easily use Markov Chain Monte Carlo (MCMC) methods for Bayesian inference when the parameter you are interested in has bounded support. The most basic MCMC methods involve using additive noise to get new draws, which can cause problems if that kicks you out of the parameter space.
 Suggestions abound to use the transformation trick on a bounded parameter \(\theta\), and then make draws of the transformed parameter.</description>
     </item>
-    
   </channel>
 </rss>
