@@ -9,6 +9,15 @@
     <lastBuildDate>Sat, 02 Dec 2023 00:00:00 +0000</lastBuildDate>
     <atom:link href="/tags/r/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Estimating the Unconditional Median with Deep Learning: A Practical Approach Using R and Keras</title>
+      <link>/post/2023-12-02-estimating-the-unconditional-median-with-deep-learning-a-practical-approach-using-r-and-keras/</link>
+      <pubDate>Sat, 02 Dec 2023 00:00:00 +0000</pubDate>
+      <guid>/post/2023-12-02-estimating-the-unconditional-median-with-deep-learning-a-practical-approach-using-r-and-keras/</guid>
+      <description>NOTE: This post is an parody in the same genre as How to Burn Money and Computing Power for a Simple Median.
+This post was generated using the same code as in the previous post, but with the prompt:
+Write a post in the style of Towards Data Science about the following code. Keep in mind that this code is showing how to estimate an unconditional median using a deep learning model.</description>
+    </item>
+    <item>
       <title>How to Burn Money and Computing Power for a Simple Median</title>
       <link>/post/2023-12-02-how-to-burn-money-and-computing-power-for-a-simple-median/</link>
       <pubDate>Sat, 02 Dec 2023 00:00:00 +0000</pubDate>
