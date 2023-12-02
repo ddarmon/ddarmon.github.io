@@ -2,73 +2,73 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>/categories/</loc>
+    <loc>https://ddarmon.github.io/categories/</loc>
     <lastmod>2023-12-02T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/categories/deep-learning/</loc>
+    <loc>https://ddarmon.github.io/categories/deep-learning/</loc>
     <lastmod>2023-12-02T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/post/2023-12-02-estimating-the-unconditional-median-with-deep-learning-a-practical-approach-using-r-and-keras/</loc>
+    <loc>https://ddarmon.github.io/post/2023-12-02-estimating-the-unconditional-median-with-deep-learning-a-practical-approach-using-r-and-keras/</loc>
     <lastmod>2023-12-02T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/post/2023-12-02-how-to-burn-money-and-computing-power-for-a-simple-median/</loc>
+    <loc>https://ddarmon.github.io/post/2023-12-02-how-to-burn-money-and-computing-power-for-a-simple-median/</loc>
     <lastmod>2023-12-02T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/tags/humorous/</loc>
+    <loc>https://ddarmon.github.io/tags/humorous/</loc>
     <lastmod>2023-12-02T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/post/</loc>
+    <loc>https://ddarmon.github.io/post/</loc>
     <lastmod>2023-12-02T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/</loc>
+    <loc>https://ddarmon.github.io/</loc>
     <lastmod>2023-12-02T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/tags/r/</loc>
+    <loc>https://ddarmon.github.io/tags/r/</loc>
     <lastmod>2023-12-02T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/tags/</loc>
+    <loc>https://ddarmon.github.io/tags/</loc>
     <lastmod>2023-12-02T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/categories/bayesian-statistics/</loc>
+    <loc>https://ddarmon.github.io/categories/bayesian-statistics/</loc>
     <lastmod>2021-09-13T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/categories/fiducial-inference/</loc>
+    <loc>https://ddarmon.github.io/categories/fiducial-inference/</loc>
     <lastmod>2021-09-13T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/post/weakly-informative-and-fiducial-priors-for-gaussian-mean-and-variance/</loc>
+    <loc>https://ddarmon.github.io/post/weakly-informative-and-fiducial-priors-for-gaussian-mean-and-variance/</loc>
     <lastmod>2021-09-13T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/tags/reminders/</loc>
+    <loc>https://ddarmon.github.io/tags/reminders/</loc>
     <lastmod>2021-09-13T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/tags/statistics/</loc>
+    <loc>https://ddarmon.github.io/tags/statistics/</loc>
     <lastmod>2021-09-13T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/categories/statistics/</loc>
+    <loc>https://ddarmon.github.io/categories/statistics/</loc>
     <lastmod>2021-09-13T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/tags/worked-examples/</loc>
+    <loc>https://ddarmon.github.io/tags/worked-examples/</loc>
     <lastmod>2021-09-13T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/categories/bayesian-statitics/</loc>
+    <loc>https://ddarmon.github.io/categories/bayesian-statitics/</loc>
     <lastmod>2020-12-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/post/bounded-bayes/</loc>
+    <loc>https://ddarmon.github.io/post/bounded-bayes/</loc>
     <lastmod>2020-12-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/tags/confidence-functions/</loc>
+    <loc>https://ddarmon.github.io/tags/confidence-functions/</loc>
     <lastmod>2020-12-04T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/categories/confidence-functions/</loc>
+    <loc>https://ddarmon.github.io/categories/confidence-functions/</loc>
     <lastmod>2020-12-04T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/post/confidence-covid-mask-protection/</loc>
+    <loc>https://ddarmon.github.io/post/confidence-covid-mask-protection/</loc>
     <lastmod>2020-12-04T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/post/the-land-of-lost-significance-exact-tests-with-discrete-test-statistics/</loc>
+    <loc>https://ddarmon.github.io/post/the-land-of-lost-significance-exact-tests-with-discrete-test-statistics/</loc>
     <lastmod>2020-06-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/post/salvaging-lost-significance-via-randomization-randomized-p-values-for-discrete-test-statistics/</loc>
+    <loc>https://ddarmon.github.io/post/salvaging-lost-significance-via-randomization-randomized-p-values-for-discrete-test-statistics/</loc>
     <lastmod>2020-06-28T00:00:00+00:00</lastmod>
   </url>
 </urlset>
