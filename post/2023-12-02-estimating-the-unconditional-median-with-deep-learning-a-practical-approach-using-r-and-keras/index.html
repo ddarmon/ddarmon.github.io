@@ -39,7 +39,7 @@ Write a post in the style of Towards Data Science about the following code. Keep
 This post was generated using the same code as in the previous post, but with the prompt:
 Write a post in the style of Towards Data Science about the following code. Keep in mind that this code is showing how to estimate an unconditional median using a deep learning model."><meta itemprop="datePublished" content="2023-12-02T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2023-12-02T00:00:00+00:00" />
-<meta itemprop="wordCount" content="497">
+<meta itemprop="wordCount" content="525">
 <meta itemprop="keywords" content="humorous,R," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Estimating the Unconditional Median with Deep Learning: A Practical Approach Using R and Keras"/>
 <meta name="twitter:description" content="NOTE: This post is an parody in the same genre as How to Burn Money and Computing Power for a Simple Median.
@@ -119,6 +119,11 @@ Write a post in the style of Towards Data Science about the following code. Keep
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
 <p>In this post, we dive into an innovative method of estimating the unconditional median using a deep learning model. This approach, particularly useful in statistical analysis and predictive modeling, leverages the power of the Keras library in R. We start by setting up the necessary libraries, including <code>keras</code> and <code>tensorflow</code>, and a dedicated virtual environment for seamless integration.</p>
+<pre class="r"><code>library(dplyr)
+library(ggplot2)
+library(keras)
+library(tensorflow)
+reticulate::use_virtualenv(&quot;r-tensorflow&quot;)</code></pre>
 </div>
 <div id="data-simulation-and-preparation" class="section level2">
 <h2>Data Simulation and Preparation</h2>
@@ -158,6 +163,14 @@ model %&gt;%
 <div id="training-and-early-stopping" class="section level2">
 <h2>Training and Early Stopping</h2>
 <p>Training the model involves fitting it to our data, with a significant emphasis on overfitting prevention using early stopping. This method halts training when the validation loss ceases to decrease, ensuring our model generalizes well.</p>
+<pre class="r"><code>model %&gt;%
+  fit(
+    x, y,
+    batch_size = nrow(x),
+    epochs = 200,
+    validation_split = 0.2,
+    callbacks = callback_early_stopping(patience = 10, restore_best_weights = TRUE)
+  )</code></pre>
 </div>
 <div id="model-evaluation-and-visualization" class="section level2">
 <h2>Model Evaluation and Visualization</h2>
@@ -165,11 +178,11 @@ model %&gt;%
 <pre class="r"><code>loss</code></pre>
 <pre><code>## [1] &quot;mae&quot;</code></pre>
 <pre class="r"><code>mean(y)</code></pre>
-<pre><code>## [1] 1.665647</code></pre>
+<pre><code>## [1] 1.633934</code></pre>
 <pre class="r"><code>median(y)</code></pre>
-<pre><code>## [1] 1.003361</code></pre>
+<pre><code>## [1] 1.00145</code></pre>
 <pre class="r"><code>model(x) %&gt;% head(1)</code></pre>
-<pre><code>## tf.Tensor([[1.0011004]], shape=(1, 1), dtype=float32)</code></pre>
+<pre><code>## tf.Tensor([[0.9682285]], shape=(1, 1), dtype=float32)</code></pre>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
